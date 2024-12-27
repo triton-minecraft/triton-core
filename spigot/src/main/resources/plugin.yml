@@ -1,0 +1,5 @@
+main: dev.kyriji.spigot.TritonCoreSpigot
+name: TritonCoreSpigot
+version: 1.0.0
+commands:
+  test:
