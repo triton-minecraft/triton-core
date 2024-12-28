@@ -1,5 +1,7 @@
 package dev.kyriji.common.model;
 
-public interface TritonPlayer {
+public interface TritonCommandSender {
 	void sendMessage(String message);
+
+	String getName();
 }
