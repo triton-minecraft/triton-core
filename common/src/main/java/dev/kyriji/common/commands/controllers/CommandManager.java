@@ -1,5 +1,6 @@
 package dev.kyriji.common.commands.controllers;
 
+import dev.kyriji.common.commands.commands.ProxyCommand;
 import dev.kyriji.common.commands.commands.TestCommand;
 import dev.kyriji.common.commands.models.TritonCommand;
 import dev.kyriji.common.model.TritonHook;
@@ -17,6 +18,7 @@ public class CommandManager {
 
 	public static void init(TritonHook hook) {
 		registerCommand(new TestCommand());
+		registerCommand(new ProxyCommand());
 
 		commands.forEach(hook::registerCommand);
 	}

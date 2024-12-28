@@ -9,6 +9,7 @@ import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.proxy.ProxyServer;
 import dev.kyriji.common.TritonCoreCommon;
+import dev.kyriji.common.commands.enums.CommandType;
 import dev.kyriji.common.commands.models.TritonCommand;
 import dev.kyriji.common.model.TritonCommandSender;
 import dev.kyriji.common.model.TritonHook;
@@ -35,6 +36,7 @@ public class TritonCoreVelocity {
 		TritonHook hook = new TritonHook() {
 			@Override
 			public void registerCommand(TritonCommand command) {
+				if(command.getType() != CommandType.PROXY) return;
 
 				SimpleCommand commandInstance = invocation -> {
 					String[] args = invocation.arguments();

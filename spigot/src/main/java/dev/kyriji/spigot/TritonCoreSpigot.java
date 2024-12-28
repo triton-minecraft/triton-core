@@ -2,6 +2,7 @@ package dev.kyriji.spigot;
 
 import dev.kyriji.common.TritonCoreCommon;
 import dev.kyriji.common.commands.controllers.CommandManager;
+import dev.kyriji.common.commands.enums.CommandType;
 import dev.kyriji.common.commands.models.TritonCommand;
 import dev.kyriji.common.model.TritonHook;
 import dev.kyriji.spigot.implementation.SpigotCommandSender;
@@ -18,7 +19,8 @@ public class TritonCoreSpigot extends JavaPlugin {
 		TritonHook hook = new TritonHook() {
 			@Override
 			public void registerCommand(TritonCommand command) {
-				System.out.println("Registering command " + command.getIdentifier());
+				if(command.getType() != CommandType.SERVER) return;
+
 				PluginCommand spigotCommand = TritonCoreSpigot.this.getCommand(command.getIdentifier());
 				if(spigotCommand == null) throw new NullPointerException("Command " + command.getIdentifier() + " failed to register");
 
