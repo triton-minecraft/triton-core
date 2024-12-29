@@ -1,11 +1,11 @@
 package dev.kyriji.common.playerdata.enums;
 
-import dev.kyriji.common.playerdata.documents.NetworkDocument;
+import dev.kyriji.common.playerdata.documents.NetworkData;
 import dev.kyriji.common.playerdata.model.PlayerDataDocument;
 
 public enum PlayerDataType {
 
-	NETWORK("network", NetworkDocument.class),
+	NETWORK("network", NetworkData.class),
 	;
 
 

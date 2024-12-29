@@ -1,6 +1,7 @@
 package dev.kyriji.common;
 
 import dev.kyriji.common.commands.controllers.CommandManager;
+import dev.kyriji.common.config.controllers.ConfigManager;
 import dev.kyriji.common.models.TritonHook;
 import dev.kyriji.common.playerdata.controllers.PlayerDataManager;
 
@@ -10,7 +11,9 @@ public class TritonCoreCommon {
 	public static void init(TritonHook hook) {
 		baseHook = hook;
 
+		ConfigManager.init(hook);
 		CommandManager.init(hook);
 		PlayerDataManager.init(hook);
+		ConfigManager.init(hook);
 	}
 }

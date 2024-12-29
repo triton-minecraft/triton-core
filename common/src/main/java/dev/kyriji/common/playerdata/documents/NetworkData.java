@@ -1,19 +1,18 @@
 package dev.kyriji.common.playerdata.documents;
 
 import dev.kyriji.common.playerdata.model.PlayerDataDocument;
-import org.bson.codecs.pojo.annotations.BsonDiscriminator;
-import org.bson.codecs.pojo.annotations.BsonProperty;
+
 import java.util.UUID;
 
-public class NetworkDocument extends PlayerDataDocument {
+public class NetworkData extends PlayerDataDocument {
 
 	private String name = null;
 
-	public NetworkDocument() {
+	public NetworkData() {
 		super();
 	}
 
-	public NetworkDocument(UUID uuid, String name) {
+	public NetworkData(UUID uuid, String name) {
 		this.uuid = uuid.toString();
 		this.name = name;
 	}

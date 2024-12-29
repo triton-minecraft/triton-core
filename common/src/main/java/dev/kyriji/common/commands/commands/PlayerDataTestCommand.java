@@ -5,7 +5,7 @@ import dev.kyriji.common.commands.models.TritonCommand;
 import dev.kyriji.common.models.TritonCommandSender;
 import dev.kyriji.common.models.TritonPlayer;
 import dev.kyriji.common.playerdata.controllers.PlayerDataManager;
-import dev.kyriji.common.playerdata.documents.NetworkDocument;
+import dev.kyriji.common.playerdata.documents.NetworkData;
 import dev.kyriji.common.playerdata.enums.PlayerDataType;
 
 import java.util.Arrays;
@@ -35,7 +35,7 @@ public class PlayerDataTestCommand extends TritonCommand {
 	@Override
 	public void execute(TritonCommandSender sender, String[] args) {
 		if(!(sender instanceof TritonPlayer player)) return;
-		NetworkDocument document = PlayerDataManager.getPlayerData(player.getUuid(), PlayerDataType.NETWORK);
+		NetworkData document = PlayerDataManager.getPlayerData(player.getUuid(), PlayerDataType.NETWORK);
 		if(document == null) {
 			player.sendMessage("Failed to load player data");
 			return;

@@ -4,6 +4,7 @@ import dev.kyriji.common.TritonCoreCommon;
 import dev.kyriji.common.commands.enums.CommandType;
 import dev.kyriji.common.commands.models.TritonCommand;
 import dev.kyriji.common.models.TritonHook;
+import dev.kyriji.minestom.controllers.ConfigManager;
 import dev.kyriji.minestom.implementation.MinestomCommandSender;
 import dev.kyriji.minestom.implementation.MinestomPlayer;
 import net.minestom.server.MinecraftServer;
@@ -15,6 +16,8 @@ import java.util.Arrays;
 public class TritonCoreMinestom {
 
 	public static void init() {
+		ConfigManager.init();
+
 		TritonHook hook = new TritonHook() {
 			@Override
 			public void registerCommand(TritonCommand command) {
@@ -33,6 +36,11 @@ public class TritonCoreMinestom {
 				}};
 
 				MinecraftServer.getCommandManager().register(commandInstance);
+			}
+
+			@Override
+			public String getConfigValue(String key) {
+				return ConfigManager.getValue(key);
 			}
 		};
 

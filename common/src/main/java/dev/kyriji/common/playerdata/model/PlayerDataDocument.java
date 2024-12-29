@@ -7,7 +7,6 @@ import org.bson.codecs.pojo.annotations.BsonProperty;
 
 import java.util.Objects;
 
-@BsonDiscriminator
 public abstract class PlayerDataDocument {
 	protected String uuid;
 
