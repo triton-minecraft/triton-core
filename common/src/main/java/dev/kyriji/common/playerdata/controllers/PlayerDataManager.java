@@ -7,7 +7,7 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.ReplaceOptions;
-import dev.kyriji.common.model.TritonHook;
+import dev.kyriji.common.models.TritonHook;
 import dev.kyriji.common.playerdata.enums.PlayerDataType;
 import dev.kyriji.common.playerdata.model.PlayerDataDocument;
 import org.bson.codecs.configuration.CodecProvider;

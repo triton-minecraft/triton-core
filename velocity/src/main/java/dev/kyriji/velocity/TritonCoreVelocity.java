@@ -2,7 +2,6 @@ package dev.kyriji.velocity;
 
 import com.google.inject.Inject;
 import com.velocitypowered.api.command.CommandMeta;
-import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
@@ -12,12 +11,10 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import dev.kyriji.common.TritonCoreCommon;
 import dev.kyriji.common.commands.enums.CommandType;
 import dev.kyriji.common.commands.models.TritonCommand;
-import dev.kyriji.common.model.TritonCommandSender;
-import dev.kyriji.common.model.TritonHook;
+import dev.kyriji.common.models.TritonHook;
 import dev.kyriji.velocity.implementation.VelocityCommandSender;
 import dev.kyriji.velocity.implementation.VelocityPlayer;
 
-import java.util.Arrays;
 import java.util.logging.Logger;
 
 @Plugin(id = "triton-core", name = "TritonCore", version = "1.0",

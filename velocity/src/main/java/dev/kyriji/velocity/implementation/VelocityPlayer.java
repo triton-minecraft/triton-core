@@ -1,7 +1,7 @@
 package dev.kyriji.velocity.implementation;
 
 import com.velocitypowered.api.proxy.Player;
-import dev.kyriji.common.model.TritonPlayer;
+import dev.kyriji.common.models.TritonPlayer;
 import net.kyori.adventure.text.Component;
 
 import java.util.UUID;

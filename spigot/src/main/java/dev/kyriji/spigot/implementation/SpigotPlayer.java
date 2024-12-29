@@ -1,6 +1,6 @@
 package dev.kyriji.spigot.implementation;
 
-import dev.kyriji.common.model.TritonPlayer;
+import dev.kyriji.common.models.TritonPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;

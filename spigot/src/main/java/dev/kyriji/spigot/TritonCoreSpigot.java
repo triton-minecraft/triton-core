@@ -1,10 +1,9 @@
 package dev.kyriji.spigot;
 
 import dev.kyriji.common.TritonCoreCommon;
-import dev.kyriji.common.commands.controllers.CommandManager;
 import dev.kyriji.common.commands.enums.CommandType;
 import dev.kyriji.common.commands.models.TritonCommand;
-import dev.kyriji.common.model.TritonHook;
+import dev.kyriji.common.models.TritonHook;
 import dev.kyriji.spigot.implementation.SpigotCommandSender;
 import dev.kyriji.spigot.implementation.SpigotPlayer;
 import org.bukkit.command.PluginCommand;

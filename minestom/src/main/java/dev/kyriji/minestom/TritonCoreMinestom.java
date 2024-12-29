@@ -1,15 +1,13 @@
 package dev.kyriji.minestom;
 
 import dev.kyriji.common.TritonCoreCommon;
-import dev.kyriji.common.commands.commands.TestCommand;
 import dev.kyriji.common.commands.enums.CommandType;
 import dev.kyriji.common.commands.models.TritonCommand;
-import dev.kyriji.common.model.TritonHook;
+import dev.kyriji.common.models.TritonHook;
 import dev.kyriji.minestom.implementation.MinestomCommandSender;
 import dev.kyriji.minestom.implementation.MinestomPlayer;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.Command;
-import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.entity.Player;
 
 import java.util.Arrays;
@@ -40,6 +38,6 @@ public class TritonCoreMinestom {
 
 		TritonCoreCommon.init(hook);
 
-		
+
 	}
 }

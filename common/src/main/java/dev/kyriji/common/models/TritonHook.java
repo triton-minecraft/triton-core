@@ -1,4 +1,4 @@
-package dev.kyriji.common.model;
+package dev.kyriji.common.models;
 
 import dev.kyriji.common.commands.models.TritonCommand;
 

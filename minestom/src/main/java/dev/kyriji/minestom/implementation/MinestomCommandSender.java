@@ -1,6 +1,6 @@
 package dev.kyriji.minestom.implementation;
 
-import dev.kyriji.common.model.TritonCommandSender;
+import dev.kyriji.common.models.TritonCommandSender;
 import net.minestom.server.command.CommandSender;
 
 public class MinestomCommandSender implements TritonCommandSender {

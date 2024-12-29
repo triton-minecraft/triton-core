@@ -2,12 +2,10 @@ package dev.kyriji.common.commands.commands;
 
 import dev.kyriji.common.commands.enums.CommandType;
 import dev.kyriji.common.commands.models.TritonCommand;
-import dev.kyriji.common.model.TritonCommandSender;
-import dev.kyriji.common.model.TritonPlayer;
+import dev.kyriji.common.models.TritonCommandSender;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 public class TestCommand extends TritonCommand {
 	@Override

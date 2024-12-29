@@ -1,6 +1,6 @@
 package dev.kyriji.minestom.implementation;
 
-import dev.kyriji.common.model.TritonPlayer;
+import dev.kyriji.common.models.TritonPlayer;
 import net.minestom.server.entity.Player;
 
 import java.util.UUID;

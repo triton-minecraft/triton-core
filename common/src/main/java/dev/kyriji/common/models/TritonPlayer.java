@@ -1,4 +1,4 @@
-package dev.kyriji.common.model;
+package dev.kyriji.common.models;
 
 import java.util.UUID;
 

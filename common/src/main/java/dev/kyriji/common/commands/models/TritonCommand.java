@@ -1,9 +1,7 @@
 package dev.kyriji.common.commands.models;
 
-import dev.kyriji.common.commands.controllers.CommandManager;
 import dev.kyriji.common.commands.enums.CommandType;
-import dev.kyriji.common.model.TritonCommandSender;
-import dev.kyriji.common.model.TritonPlayer;
+import dev.kyriji.common.models.TritonCommandSender;
 
 import java.util.List;
 

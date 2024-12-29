@@ -2,7 +2,7 @@ package dev.kyriji.velocity.implementation;
 
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.Player;
-import dev.kyriji.common.model.TritonCommandSender;
+import dev.kyriji.common.models.TritonCommandSender;
 import net.kyori.adventure.text.Component;
 
 public class VelocityCommandSender implements TritonCommandSender {

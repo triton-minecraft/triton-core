@@ -1,6 +1,6 @@
 package dev.kyriji.spigot.implementation;
 
-import dev.kyriji.common.model.TritonCommandSender;
+import dev.kyriji.common.models.TritonCommandSender;
 import org.bukkit.command.CommandSender;
 
 public class SpigotCommandSender implements TritonCommandSender {

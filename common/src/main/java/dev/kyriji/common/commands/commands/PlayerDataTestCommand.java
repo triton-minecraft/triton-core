@@ -2,12 +2,11 @@ package dev.kyriji.common.commands.commands;
 
 import dev.kyriji.common.commands.enums.CommandType;
 import dev.kyriji.common.commands.models.TritonCommand;
-import dev.kyriji.common.model.TritonCommandSender;
-import dev.kyriji.common.model.TritonPlayer;
+import dev.kyriji.common.models.TritonCommandSender;
+import dev.kyriji.common.models.TritonPlayer;
 import dev.kyriji.common.playerdata.controllers.PlayerDataManager;
 import dev.kyriji.common.playerdata.documents.NetworkDocument;
 import dev.kyriji.common.playerdata.enums.PlayerDataType;
-import dev.kyriji.common.playerdata.model.PlayerDataDocument;
 
 import java.util.Arrays;
 import java.util.List;
