@@ -3,6 +3,8 @@ package dev.kyriji.spigot.implementation;
 import dev.kyriji.common.model.TritonPlayer;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 public class SpigotPlayer extends SpigotCommandSender implements TritonPlayer {
 	public Player player;
 
@@ -10,6 +12,11 @@ public class SpigotPlayer extends SpigotCommandSender implements TritonPlayer {
 		super(player);
 
 		this.player = player;
+	}
+
+	@Override
+	public UUID getUuid() {
+		return player.getUniqueId();
 	}
 
 	@Override

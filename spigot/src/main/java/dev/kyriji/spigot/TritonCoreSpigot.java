@@ -25,7 +25,11 @@ public class TritonCoreSpigot extends JavaPlugin {
 				if(spigotCommand == null) throw new NullPointerException("Command " + command.getIdentifier() + " failed to register");
 
 				spigotCommand.setExecutor((sender, cmd, label, args) -> {
-					SpigotCommandSender commandSender = new SpigotCommandSender(sender);
+					SpigotCommandSender commandSender;
+
+					if(sender instanceof Player player) commandSender = new SpigotPlayer(player);
+					else commandSender = new SpigotCommandSender(sender);
+
 					command.execute(commandSender, args);
 					return false;
 				});

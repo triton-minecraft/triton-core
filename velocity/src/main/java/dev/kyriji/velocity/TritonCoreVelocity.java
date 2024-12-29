@@ -7,6 +7,7 @@ import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.Plugin;
+import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import dev.kyriji.common.TritonCoreCommon;
 import dev.kyriji.common.commands.enums.CommandType;
@@ -14,6 +15,7 @@ import dev.kyriji.common.commands.models.TritonCommand;
 import dev.kyriji.common.model.TritonCommandSender;
 import dev.kyriji.common.model.TritonHook;
 import dev.kyriji.velocity.implementation.VelocityCommandSender;
+import dev.kyriji.velocity.implementation.VelocityPlayer;
 
 import java.util.Arrays;
 import java.util.logging.Logger;
@@ -40,7 +42,10 @@ public class TritonCoreVelocity {
 
 				SimpleCommand commandInstance = invocation -> {
 					String[] args = invocation.arguments();
-					VelocityCommandSender sender = new VelocityCommandSender(invocation.source());
+					VelocityCommandSender sender;
+
+					if(invocation.source() instanceof Player player) sender = new VelocityPlayer(player);
+					else sender = new VelocityCommandSender(invocation.source());
 
 					command.execute(sender, args);
 				};

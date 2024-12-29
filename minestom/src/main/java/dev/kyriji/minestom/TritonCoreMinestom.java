@@ -6,9 +6,11 @@ import dev.kyriji.common.commands.enums.CommandType;
 import dev.kyriji.common.commands.models.TritonCommand;
 import dev.kyriji.common.model.TritonHook;
 import dev.kyriji.minestom.implementation.MinestomCommandSender;
+import dev.kyriji.minestom.implementation.MinestomPlayer;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.entity.Player;
 
 import java.util.Arrays;
 
@@ -22,7 +24,10 @@ public class TritonCoreMinestom {
 
 				Command commandInstance = new Command(command.getIdentifier()) {{
 					setDefaultExecutor((sender, context) -> {
-						MinestomCommandSender minestomSender = new MinestomCommandSender(sender);
+						MinestomCommandSender minestomSender;
+
+						if(sender instanceof Player) minestomSender = new MinestomPlayer((Player) sender);
+						else minestomSender = new MinestomCommandSender(sender);
 
 						String[] args = context.getInput().split(" ");
 						command.execute(minestomSender, Arrays.copyOfRange(args, 1, args.length));
@@ -34,5 +39,7 @@ public class TritonCoreMinestom {
 		};
 
 		TritonCoreCommon.init(hook);
+
+		
 	}
 }

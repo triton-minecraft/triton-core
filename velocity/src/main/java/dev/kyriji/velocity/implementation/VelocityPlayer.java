@@ -4,6 +4,8 @@ import com.velocitypowered.api.proxy.Player;
 import dev.kyriji.common.model.TritonPlayer;
 import net.kyori.adventure.text.Component;
 
+import java.util.UUID;
+
 public class VelocityPlayer extends VelocityCommandSender implements TritonPlayer {
 	public Player player;
 
@@ -11,6 +13,11 @@ public class VelocityPlayer extends VelocityCommandSender implements TritonPlaye
 		super(player);
 
 		this.player = player;
+	}
+
+	@Override
+	public UUID getUuid() {
+		return player.getUniqueId();
 	}
 
 	@Override
