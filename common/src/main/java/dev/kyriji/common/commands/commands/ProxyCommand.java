@@ -5,6 +5,7 @@ import dev.kyriji.common.commands.models.TritonCommand;
 import dev.kyriji.common.model.TritonCommandSender;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class ProxyCommand extends TritonCommand {
 	@Override
@@ -20,6 +21,11 @@ public class ProxyCommand extends TritonCommand {
 	@Override
 	public CommandType getType() {
 		return CommandType.PROXY;
+	}
+
+	@Override
+	public List<String> getTabCompletions(TritonCommandSender sender, String[] args) {
+		return Arrays.asList("test12", "test22", "test32");
 	}
 
 	@Override

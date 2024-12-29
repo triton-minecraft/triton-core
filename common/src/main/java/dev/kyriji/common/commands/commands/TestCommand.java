@@ -6,6 +6,8 @@ import dev.kyriji.common.model.TritonCommandSender;
 import dev.kyriji.common.model.TritonPlayer;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 public class TestCommand extends TritonCommand {
 	@Override
@@ -21,6 +23,12 @@ public class TestCommand extends TritonCommand {
 	@Override
 	public CommandType getType() {
 		return CommandType.SERVER;
+	}
+
+	@Override
+	public List<String> getTabCompletions(TritonCommandSender sender, String[] args) {
+		System.out.println(Arrays.toString(args));
+		return Arrays.asList("test1", "test2", "test3");
 	}
 
 	@Override
