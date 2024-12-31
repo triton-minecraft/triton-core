@@ -7,18 +7,15 @@ import dev.kyriji.common.inventory.models.hooks.TritonItemStackHook;
 import dev.kyriji.common.inventory.records.InventoryClickInfo;
 import dev.kyriji.common.models.TritonPlayer;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.event.ClickCallback;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.EventFilter;
-import net.minestom.server.event.EventNode;
-import net.minestom.server.event.inventory.InventoryClickEvent;
+import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
 
-import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public class MinestomInventoryHook implements TritonInventoryHook {
@@ -35,6 +32,8 @@ public class MinestomInventoryHook implements TritonInventoryHook {
 		TritonItemStack[] items = tritonInventory.getContents();
 
 		for(int i = 0; i < items.length; i++) {
+			if(items[i] == null) continue;
+
 			ItemStack item = getItemStackHook().toServerItem(items[i]);
 			inventory.setItemStack(i, item);
 		}
@@ -42,10 +41,17 @@ public class MinestomInventoryHook implements TritonInventoryHook {
 		minestomPlayer.openInventory(inventory);
 		this.inventoryId = inventory.getWindowId();
 
-		EventNode.type("click", EventFilter.INVENTORY, (event, inv) -> inventory == inv)
-				.addListener(InventoryClickEvent.class, event -> {
-					if(clickCallback != null) clickCallback.accept(new InventoryClickInfo(player, event.getSlot()));
-				});
+
+		var handler = MinecraftServer.getGlobalEventHandler();
+
+		handler.addListener(InventoryPreClickEvent.class, event -> {
+			if(Objects.requireNonNull(event.getInventory()).getWindowId() != this.inventoryId) return;
+
+			event.setCancelled(true);
+			if(clickCallback != null) clickCallback.accept(new InventoryClickInfo(player, event.getSlot()));
+		});
+
+		//TODO: Handle inventory close event
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package dev.kyriji.common.inventory.models;
 
+import dev.kyriji.common.TritonCoreCommon;
 import dev.kyriji.common.inventory.records.InventoryClickInfo;
 import dev.kyriji.common.models.TritonPlayer;
 
@@ -15,14 +16,16 @@ public abstract class TritonInventory {
 		this.rows = rows;
 		this.title = title;
 		this.items = new TritonItemStack[rows * 9];
+
+		TritonCoreCommon.INSTANCE.getInventoryManager().registerInventory(this);
 	}
 
 	public void open(TritonPlayer player) {
-		// use the inventory hook to open the inventory
+		TritonCoreCommon.INSTANCE.getInventoryManager().openInventory(player, this);
 	}
 
 	public void update(TritonPlayer player) {
-		// use the inventory hook to update the inventory
+		TritonCoreCommon.INSTANCE.getInventoryManager().updateInventory(player, this);
 	}
 
 	public TritonItemStack getItem(int slot) {

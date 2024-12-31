@@ -1,5 +1,6 @@
 package dev.kyriji.common.commands.controllers;
 
+import dev.kyriji.common.commands.commands.InventoryTestCommand;
 import dev.kyriji.common.commands.commands.PlayerDataTestCommand;
 import dev.kyriji.common.commands.commands.ProxyCommand;
 import dev.kyriji.common.commands.commands.TestCommand;
@@ -20,6 +21,7 @@ public class CommandManager {
 		registerCommand(new TestCommand());
 		registerCommand(new ProxyCommand());
 		registerCommand(new PlayerDataTestCommand());
+		registerCommand(new InventoryTestCommand());
 
 		commands.forEach(hook::registerCommand);
 	}

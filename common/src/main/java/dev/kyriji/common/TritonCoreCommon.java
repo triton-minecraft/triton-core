@@ -4,19 +4,26 @@ import dev.kyriji.common.commands.controllers.CommandManager;
 import dev.kyriji.common.commands.hooks.TritonCommandHook;
 import dev.kyriji.common.config.controllers.ConfigManager;
 import dev.kyriji.common.config.hooks.TritonConfigHook;
+import dev.kyriji.common.inventory.controllers.InventoryManager;
 import dev.kyriji.common.inventory.models.hooks.TritonInventoryHook;
 import dev.kyriji.common.models.TritonHook;
 import dev.kyriji.common.playerdata.controllers.PlayerDataManager;
 
 public class TritonCoreCommon {
+	public static TritonCoreCommon INSTANCE;
+
 	private final ConfigManager configManager;
 	private final CommandManager commandManager;
 	private final PlayerDataManager playerDataManager;
+	private final InventoryManager inventoryManager;
 
 	private TritonCoreCommon(Builder builder) {
 		this.configManager = builder.configManager;
 		this.commandManager = builder.commandManager;
 		this.playerDataManager = builder.playerDataManager;
+		this.inventoryManager = builder.inventoryManager;
+
+		INSTANCE = this;
 	}
 
 	public static Builder builder() {
@@ -35,10 +42,15 @@ public class TritonCoreCommon {
 		return playerDataManager;
 	}
 
+	public InventoryManager getInventoryManager() {
+		return inventoryManager;
+	}
+
 	public static class Builder {
 		private ConfigManager configManager;
 		private CommandManager commandManager;
 		private PlayerDataManager playerDataManager;
+		private InventoryManager inventoryManager;
 
 		private Builder() {
 		}
@@ -59,7 +71,7 @@ public class TritonCoreCommon {
 		}
 
 		public Builder withInventory(TritonInventoryHook inventoryHook) {
-			// No manager for inventory yet
+			this.inventoryManager = new InventoryManager(inventoryHook);
 			return this;
 		}
 
