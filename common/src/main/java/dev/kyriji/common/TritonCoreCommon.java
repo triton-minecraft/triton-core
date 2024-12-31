@@ -1,19 +1,70 @@
 package dev.kyriji.common;
 
 import dev.kyriji.common.commands.controllers.CommandManager;
+import dev.kyriji.common.commands.hooks.TritonCommandHook;
 import dev.kyriji.common.config.controllers.ConfigManager;
+import dev.kyriji.common.config.hooks.TritonConfigHook;
+import dev.kyriji.common.inventory.models.hooks.TritonInventoryHook;
 import dev.kyriji.common.models.TritonHook;
 import dev.kyriji.common.playerdata.controllers.PlayerDataManager;
 
 public class TritonCoreCommon {
-	public static TritonHook baseHook;
+	private final ConfigManager configManager;
+	private final CommandManager commandManager;
+	private final PlayerDataManager playerDataManager;
 
-	public static void init(TritonHook hook) {
-		baseHook = hook;
+	private TritonCoreCommon(Builder builder) {
+		this.configManager = builder.configManager;
+		this.commandManager = builder.commandManager;
+		this.playerDataManager = builder.playerDataManager;
+	}
 
-		ConfigManager.init(hook);
-		CommandManager.init(hook);
-		PlayerDataManager.init(hook);
-		ConfigManager.init(hook);
+	public static Builder builder() {
+		return new Builder();
+	}
+
+	public ConfigManager getConfigManager() {
+		return configManager;
+	}
+
+	public CommandManager getCommandManager() {
+		return commandManager;
+	}
+
+	public PlayerDataManager getPlayerDataManager() {
+		return playerDataManager;
+	}
+
+	public static class Builder {
+		private ConfigManager configManager;
+		private CommandManager commandManager;
+		private PlayerDataManager playerDataManager;
+
+		private Builder() {
+		}
+
+		public Builder withConfig(TritonConfigHook configHook) {
+			this.configManager = new ConfigManager(configHook);
+			return this;
+		}
+
+		public Builder withCommands(TritonCommandHook commandHook) {
+			this.commandManager = new CommandManager(commandHook);
+			return this;
+		}
+
+		public Builder withPlayerData() {
+			this.playerDataManager = new PlayerDataManager();
+			return this;
+		}
+
+		public Builder withInventory(TritonInventoryHook inventoryHook) {
+			// No manager for inventory yet
+			return this;
+		}
+
+		public TritonCoreCommon build() {
+			return new TritonCoreCommon(this);
+		}
 	}
 }

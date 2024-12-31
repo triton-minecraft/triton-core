@@ -3,11 +3,11 @@ package dev.kyriji.common.config.controllers;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.ReplaceOptions;
 import dev.kyriji.common.config.enums.ConfigType;
+import dev.kyriji.common.config.hooks.TritonConfigHook;
 import dev.kyriji.common.config.models.ConfigDocument;
 import dev.kyriji.common.database.controllers.DatabaseManager;
 import dev.kyriji.common.database.enums.DatabaseType;
 import dev.kyriji.common.database.records.DatabaseConnection;
-import dev.kyriji.common.models.TritonHook;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +18,7 @@ public class ConfigManager {
 	public static final String CONFIG_COLLECTION = "config";
 	private static final Map<ConfigType, ConfigDocument> loadedConfigs = new HashMap<>();
 
-	public static void init(TritonHook hook) {
+	public ConfigManager(TritonConfigHook hook) {
 		String mongoConfigURI = hook.getConfigValue("mongoConfigURI");
 		String mongoDatabase = hook.getConfigValue("mongoConfigDatabase");
 

@@ -1,10 +1,10 @@
 package dev.kyriji.common.models;
 
 import dev.kyriji.common.commands.models.TritonCommand;
+import dev.kyriji.common.enums.TritonFeature;
 
-public abstract class TritonHook {
+import java.util.Map;
 
-	public abstract void registerCommand(TritonCommand command);
+public interface TritonHook {
 
-	public abstract String getConfigValue(String key);
 }

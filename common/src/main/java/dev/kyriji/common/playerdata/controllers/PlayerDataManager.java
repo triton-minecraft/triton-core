@@ -8,7 +8,6 @@ import dev.kyriji.common.config.enums.ConfigType;
 import dev.kyriji.common.database.controllers.DatabaseManager;
 import dev.kyriji.common.database.enums.DatabaseType;
 import dev.kyriji.common.database.records.DatabaseConnection;
-import dev.kyriji.common.models.TritonHook;
 import dev.kyriji.common.playerdata.enums.PlayerDataType;
 import dev.kyriji.common.playerdata.model.PlayerDataDocument;
 
@@ -18,7 +17,7 @@ import static com.mongodb.client.model.Filters.eq;
 
 public class PlayerDataManager {
 
-	public static void init(TritonHook hook) {
+	public PlayerDataManager() {
 		CoreConfig config = ConfigManager.getConfig(ConfigType.CORE);
 		if(config == null) throw new NullPointerException("Core config not found");
 

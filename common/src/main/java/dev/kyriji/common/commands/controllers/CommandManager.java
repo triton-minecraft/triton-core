@@ -3,8 +3,8 @@ package dev.kyriji.common.commands.controllers;
 import dev.kyriji.common.commands.commands.PlayerDataTestCommand;
 import dev.kyriji.common.commands.commands.ProxyCommand;
 import dev.kyriji.common.commands.commands.TestCommand;
+import dev.kyriji.common.commands.hooks.TritonCommandHook;
 import dev.kyriji.common.commands.models.TritonCommand;
-import dev.kyriji.common.models.TritonHook;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,11 +12,11 @@ import java.util.List;
 public class CommandManager {
 	public static List<TritonCommand> commands = new ArrayList<>();
 
-	public static void registerCommand(TritonCommand command) {
+	public void registerCommand(TritonCommand command) {
 		commands.add(command);
 	}
 
-	public static void init(TritonHook hook) {
+	public CommandManager(TritonCommandHook hook) {
 		registerCommand(new TestCommand());
 		registerCommand(new ProxyCommand());
 		registerCommand(new PlayerDataTestCommand());

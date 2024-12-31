@@ -12,7 +12,7 @@ repositories {
 
 dependencies {
     implementation(project(":common"))
-    implementation("net.minestom:minestom-snapshots:9803f2bfe3")
+    implementation("net.minestom:minestom-snapshots:698af959c8")
     implementation("ch.qos.logback:logback-classic:1.5.3")
 }
 
