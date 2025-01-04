@@ -14,7 +14,5 @@ public interface TritonInventoryHook extends TritonHook {
 
 	void updateInventory(TritonPlayer player, TritonInventory inventory);
 
-	void registerClickCallback(Consumer<InventoryClickInfo> callback);
-
 	TritonItemStackHook<?> getItemStackHook();
 }

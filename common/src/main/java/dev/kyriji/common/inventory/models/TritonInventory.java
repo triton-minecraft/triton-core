@@ -12,12 +12,12 @@ public abstract class TritonInventory {
 
 	public abstract void onClick(InventoryClickInfo clickInfo);
 
+	public abstract void onClose(TritonPlayer player);
+
 	public TritonInventory(int rows, String title) {
 		this.rows = rows;
 		this.title = title;
 		this.items = new TritonItemStack[rows * 9];
-
-		TritonCoreCommon.INSTANCE.getInventoryManager().registerInventory(this);
 	}
 
 	public void open(TritonPlayer player) {

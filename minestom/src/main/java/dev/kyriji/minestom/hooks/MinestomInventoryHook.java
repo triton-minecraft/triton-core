@@ -9,6 +9,7 @@ import dev.kyriji.common.models.TritonPlayer;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.inventory.InventoryCloseEvent;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.Inventory;
@@ -19,7 +20,6 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 public class MinestomInventoryHook implements TritonInventoryHook {
-	private Consumer<InventoryClickInfo> clickCallback;
 	private int inventoryId = -1;
 
 	@Override
@@ -48,10 +48,13 @@ public class MinestomInventoryHook implements TritonInventoryHook {
 			if(Objects.requireNonNull(event.getInventory()).getWindowId() != this.inventoryId) return;
 
 			event.setCancelled(true);
-			if(clickCallback != null) clickCallback.accept(new InventoryClickInfo(player, event.getSlot()));
+			tritonInventory.onClick(new InventoryClickInfo(player, event.getSlot()));
 		});
 
-		//TODO: Handle inventory close event
+		handler.addListener(InventoryCloseEvent.class, event -> {
+			if(event.getInventory().getWindowId() != this.inventoryId) return;
+			tritonInventory.onClose(player);
+		});
 	}
 
 	@Override
@@ -68,11 +71,6 @@ public class MinestomInventoryHook implements TritonInventoryHook {
 			ItemStack item = getItemStackHook().toServerItem(items[i]);
 			inventory.setItemStack(i, item, true);
 		}
-	}
-
-	@Override
-	public void registerClickCallback(Consumer<InventoryClickInfo> callback) {
-		this.clickCallback = callback;
 	}
 
 	@Override

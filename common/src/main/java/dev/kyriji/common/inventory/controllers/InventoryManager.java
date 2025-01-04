@@ -11,10 +11,6 @@ public class InventoryManager {
 		this.hook = hook;
 	}
 
-	public void registerInventory(TritonInventory inventory) {
-		hook.registerClickCallback(inventory::onClick);
-	}
-
 	public void openInventory(TritonPlayer player, TritonInventory inventory) {
 		hook.openInventory(player, inventory);
 	}

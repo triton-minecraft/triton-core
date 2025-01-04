@@ -4,3 +4,4 @@ version: 1.0.0
 commands:
   test:
   playerdata:
+  inventory:

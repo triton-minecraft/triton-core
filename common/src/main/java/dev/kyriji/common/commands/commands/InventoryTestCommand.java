@@ -45,6 +45,11 @@ public class InventoryTestCommand extends TritonCommand {
 			public void onClick(InventoryClickInfo clickInfo) {
 				clickInfo.player().sendMessage("You clicked slot " + clickInfo.slot());
 			}
+
+			@Override
+			public void onClose(TritonPlayer player) {
+
+			}
 		};
 
 		TritonItemStack item = new TritonItemStack(TritonMaterial.DIAMOND, 1);
