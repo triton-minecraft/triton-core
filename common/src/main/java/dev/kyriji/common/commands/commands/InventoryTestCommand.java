@@ -40,10 +40,12 @@ public class InventoryTestCommand extends TritonCommand {
 	public void execute(TritonCommandSender sender, String[] args) {
 		if(!(sender instanceof TritonPlayer player)) return;
 
-		TritonInventory inventory = new TritonInventory(3, "Test Inventory") {
+		TritonInventory inventory = new TritonInventory(3, "Test Inventory", false) {
 			@Override
 			public void onClick(InventoryClickInfo clickInfo) {
 				clickInfo.player().sendMessage("You clicked slot " + clickInfo.slot());
+
+				if(clickInfo.slot() == 0) close(clickInfo.player());
 			}
 
 			@Override

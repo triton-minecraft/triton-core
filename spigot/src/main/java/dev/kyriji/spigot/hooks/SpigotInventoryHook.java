@@ -37,14 +37,16 @@ public class SpigotInventoryHook implements TritonInventoryHook {
 			}
 
 			@Override
-			@EventHandler
+			public boolean isClosable() {
+				return inventory.isClosable();
+			}
+
+			@Override
 			public void onClick(InventoryClickEvent event) {
-				event.setCancelled(true);
 				inventory.onClick(new InventoryClickInfo(tritonPlayer, event.getSlot()));
 			}
 
 			@Override
-			@EventHandler
 			public void onClose(InventoryCloseEvent event) {
 				inventory.onClose(tritonPlayer);
 			}
@@ -54,6 +56,18 @@ public class SpigotInventoryHook implements TritonInventoryHook {
 		updateInventory(tritonPlayer, inventory);
 
 		panel.open();
+	}
+
+	@Override
+	public void closeInventory(TritonPlayer player, TritonInventory inventory) {
+		InventoryPanel panel = panelMap.get(inventory.hashCode());
+		if(panel == null) return;
+
+		Player bukkitPlayer = Bukkit.getPlayer(player.getUuid());
+		if(bukkitPlayer == null) return;
+
+		panel.close();
+		panelMap.remove(inventory.hashCode());
 	}
 
 	@Override

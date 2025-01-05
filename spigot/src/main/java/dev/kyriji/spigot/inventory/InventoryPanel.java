@@ -8,19 +8,16 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
 public abstract class InventoryPanel implements InventoryHolder, Listener {
 
 	public Player player;
 	private Inventory inventory;
-	private final int inventoryId;
+	private boolean closable = isClosable();
 
 	@NotNull
 	@Override
@@ -30,7 +27,6 @@ public abstract class InventoryPanel implements InventoryHolder, Listener {
 
 	public InventoryPanel(Player player) {
 		this.player = player;
-		this.inventoryId = Math.abs(this.hashCode());
 		buildInventory();
 
 		TritonCoreSpigot.INSTANCE.getServer().getPluginManager().registerEvents(this, TritonCoreSpigot.INSTANCE);
@@ -38,15 +34,42 @@ public abstract class InventoryPanel implements InventoryHolder, Listener {
 
 	public abstract String getName();
 	public abstract int getRows();
+	public abstract boolean isClosable();
 
-	@EventHandler
 	public abstract void onClick(InventoryClickEvent event);
+	public abstract void onClose(InventoryCloseEvent event);
 
 	@EventHandler
-	public abstract void onClose(InventoryCloseEvent event);
+	public void onClickEvent(InventoryClickEvent event) {
+		if(event.getInventory().getHolder() != this) return;
+		event.setCancelled(true);
+
+		onClick(event);
+	}
+
+	@EventHandler
+	public void onCloseEvent(InventoryCloseEvent event) {
+		if(event.getInventory().getHolder() != this) return;
+		if(!closable) {
+			if(!player.isOnline()) return;
+
+			Bukkit.getScheduler().runTask(TritonCoreSpigot.INSTANCE, () -> {
+				if(player.isOnline() && !closable) open();
+			});
+		}
+		else onClose(event);
+	}
 
 	public void open() {
 		player.openInventory(inventory);
+	}
+
+	public void close() {
+		closable = true;
+		player.closeInventory();
+
+		InventoryClickEvent.getHandlerList().unregister(this);
+		InventoryCloseEvent.getHandlerList().unregister(this);
 	}
 
 	public void updateInventory() {
@@ -71,17 +94,9 @@ public abstract class InventoryPanel implements InventoryHolder, Listener {
 		return inventory.getContents();
 	}
 
-	public int getInventoryId() {
-		return inventoryId;
-	}
-
 	public void buildInventory() {
-		boolean reOpen = inventory != null && Objects.requireNonNull(player).getOpenInventory().getTopInventory().getHolder() == this;
-
 		inventory = Bukkit.createInventory(this, getSlots(getRows()),
 				ChatColor.translateAlternateColorCodes('&', getName()));
-
-		if(reOpen) player.openInventory(inventory);
 	}
 
 	private static int getSlots(int rows) {

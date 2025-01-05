@@ -12,6 +12,8 @@ import java.util.function.Consumer;
 public interface TritonInventoryHook extends TritonHook {
 	void openInventory(TritonPlayer player, TritonInventory inventory);
 
+	void closeInventory(TritonPlayer player, TritonInventory inventory);
+
 	void updateInventory(TritonPlayer player, TritonInventory inventory);
 
 	TritonItemStackHook<?> getItemStackHook();

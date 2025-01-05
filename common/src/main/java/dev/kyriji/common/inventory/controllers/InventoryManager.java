@@ -15,6 +15,10 @@ public class InventoryManager {
 		hook.openInventory(player, inventory);
 	}
 
+	public void closeInventory(TritonPlayer player, TritonInventory inventory) {
+		hook.closeInventory(player, inventory);
+	}
+
 	public void updateInventory(TritonPlayer player, TritonInventory inventory) {
 		hook.updateInventory(player, inventory);
 	}

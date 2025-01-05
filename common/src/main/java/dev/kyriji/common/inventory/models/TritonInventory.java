@@ -7,21 +7,27 @@ import dev.kyriji.common.models.TritonPlayer;
 public abstract class TritonInventory {
 	private TritonItemStack[] items;
 	private final int rows;
-
 	private final String title;
+
+	private boolean closable;
 
 	public abstract void onClick(InventoryClickInfo clickInfo);
 
 	public abstract void onClose(TritonPlayer player);
 
-	public TritonInventory(int rows, String title) {
+	public TritonInventory(int rows, String title, boolean closable) {
 		this.rows = rows;
 		this.title = title;
 		this.items = new TritonItemStack[rows * 9];
+		this.closable = closable;
 	}
 
 	public void open(TritonPlayer player) {
 		TritonCoreCommon.INSTANCE.getInventoryManager().openInventory(player, this);
+	}
+
+	public void close(TritonPlayer player) {
+		TritonCoreCommon.INSTANCE.getInventoryManager().closeInventory(player, this);
 	}
 
 	public void update(TritonPlayer player) {
@@ -50,5 +56,9 @@ public abstract class TritonInventory {
 
 	public String getTitle() {
 		return title;
+	}
+
+	public boolean isClosable() {
+		return closable;
 	}
 }
