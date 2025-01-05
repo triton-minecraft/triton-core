@@ -57,6 +57,7 @@ public class InventoryTestCommand extends TritonCommand {
 		TritonItemStack item = new TritonItemStack(TritonMaterial.DIAMOND, 1);
 		item.setDisplayName("Diamond");
 		item.setLore(List.of("A shiny diamond"));
+		item.setEnchantGlint(true);
 
 		inventory.setItem(0, item);
 

@@ -21,7 +21,7 @@ public class SpigotItemStackHook implements TritonItemStackHook<ItemStack> {
 		if(meta == null) throw new NullPointerException("ItemMeta is null");
 
 		if(item.hasEnchantGlint()) {
-			serverItem.addUnsafeEnchantment(Enchantment.AQUA_AFFINITY, 0);
+			meta.addEnchant(Enchantment.UNBREAKING, 1, true);
 			meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 		}
 
