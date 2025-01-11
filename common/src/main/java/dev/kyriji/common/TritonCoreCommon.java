@@ -1,12 +1,13 @@
 package dev.kyriji.common;
 
+import dev.kyriji.common.chat.controllers.ChatManager;
+import dev.kyriji.common.chat.hooks.TritonChatHook;
 import dev.kyriji.common.commands.controllers.CommandManager;
 import dev.kyriji.common.commands.hooks.TritonCommandHook;
 import dev.kyriji.common.config.controllers.ConfigManager;
 import dev.kyriji.common.config.hooks.TritonConfigHook;
 import dev.kyriji.common.inventory.controllers.InventoryManager;
 import dev.kyriji.common.inventory.models.hooks.TritonInventoryHook;
-import dev.kyriji.common.models.TritonHook;
 import dev.kyriji.common.playerdata.controllers.PlayerDataManager;
 
 public class TritonCoreCommon {
@@ -16,12 +17,14 @@ public class TritonCoreCommon {
 	private final CommandManager commandManager;
 	private final PlayerDataManager playerDataManager;
 	private final InventoryManager inventoryManager;
+	private final ChatManager chatManager;
 
 	private TritonCoreCommon(Builder builder) {
 		this.configManager = builder.configManager;
 		this.commandManager = builder.commandManager;
 		this.playerDataManager = builder.playerDataManager;
 		this.inventoryManager = builder.inventoryManager;
+		this.chatManager = builder.chatManager;
 
 		INSTANCE = this;
 	}
@@ -46,11 +49,16 @@ public class TritonCoreCommon {
 		return inventoryManager;
 	}
 
+	public ChatManager getChatManager() {
+		return chatManager;
+	}
+
 	public static class Builder {
 		private ConfigManager configManager;
 		private CommandManager commandManager;
 		private PlayerDataManager playerDataManager;
 		private InventoryManager inventoryManager;
+		private ChatManager chatManager;
 
 		private Builder() {
 		}
@@ -72,6 +80,11 @@ public class TritonCoreCommon {
 
 		public Builder withInventory(TritonInventoryHook inventoryHook) {
 			this.inventoryManager = new InventoryManager(inventoryHook);
+			return this;
+		}
+
+		public Builder withChat(TritonChatHook chatHook) {
+			this.chatManager = new ChatManager(chatHook);
 			return this;
 		}
 
