@@ -1,6 +1,5 @@
 package dev.kyriji.minestom;
 
-import dev.kyriji.common.TritonCoreCommon;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
