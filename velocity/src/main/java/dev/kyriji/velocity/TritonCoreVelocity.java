@@ -10,8 +10,11 @@ import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import dev.kyriji.common.TritonCoreCommon;
 import dev.kyriji.common.commands.enums.CommandType;
+import dev.kyriji.common.commands.hooks.TritonCommandHook;
 import dev.kyriji.common.commands.models.TritonCommand;
+import dev.kyriji.common.config.hooks.TritonConfigHook;
 import dev.kyriji.common.models.TritonHook;
+import dev.kyriji.velocity.controllers.ConfigManager;
 import dev.kyriji.velocity.implementation.VelocityCommandSender;
 import dev.kyriji.velocity.implementation.VelocityPlayer;
 
@@ -32,26 +35,31 @@ public class TritonCoreVelocity {
 
 	@Subscribe
 	public void onProxyInitialize(ProxyInitializeEvent event) {
-		TritonHook hook = new TritonHook() {
-			@Override
-			public void registerCommand(TritonCommand command) {
-				if(command.getType() != CommandType.PROXY) return;
+		ConfigManager.init();
 
-				SimpleCommand commandInstance = invocation -> {
-					String[] args = invocation.arguments();
-					VelocityCommandSender sender;
+		TritonConfigHook configHook = ConfigManager::getValue;
 
-					if(invocation.source() instanceof Player player) sender = new VelocityPlayer(player);
-					else sender = new VelocityCommandSender(invocation.source());
+		TritonCommandHook commandHook = command -> {
+			if(command.getType() != CommandType.SERVER) return;
 
-					command.execute(sender, args);
-				};
+			CommandMeta commandMeta = INSTANCE.getCommandManager().metaBuilder(command.getIdentifier())
+					.build();
 
-				CommandMeta meta = INSTANCE.getCommandManager().metaBuilder(command.getIdentifier()).build();
-				INSTANCE.getCommandManager().register(meta, commandInstance);
-			}
+			INSTANCE.getCommandManager().register(commandMeta, (SimpleCommand) invocation -> {
+				VelocityCommandSender velocitySender;
+
+				if(invocation.source() instanceof Player) velocitySender = new VelocityPlayer((Player) invocation.source());
+				else velocitySender = new VelocityCommandSender(invocation.source());
+
+				command.execute(velocitySender, invocation.arguments());
+			});
 		};
 
-		TritonCoreCommon.init(hook);
+		TritonCoreCommon core = TritonCoreCommon.builder()
+				.withConfig(configHook)
+				.withCommands(commandHook)
+				.withPlayerData()
+				.build();
+
 	}
 }
