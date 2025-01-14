@@ -2,6 +2,7 @@ package dev.kyriji.spigot;
 
 import dev.kyriji.common.TritonCoreCommon;
 import dev.kyriji.spigot.controllers.ConfigManager;
+import dev.kyriji.spigot.hooks.SpigotChatHook;
 import dev.kyriji.spigot.hooks.SpigotCommandHook;
 import dev.kyriji.spigot.hooks.SpigotConfigHook;
 import dev.kyriji.spigot.hooks.SpigotInventoryHook;
@@ -20,6 +21,7 @@ public class TritonCoreSpigot extends JavaPlugin {
 				.withCommands(new SpigotCommandHook())
 				.withConfig(new SpigotConfigHook())
 				.withInventory(new SpigotInventoryHook())
+				.withChat(new SpigotChatHook())
 				.withPlayerData()
 				.build();
 	}

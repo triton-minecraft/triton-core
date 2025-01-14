@@ -8,12 +8,17 @@ version = ""
 
 repositories {
     mavenCentral()
+    maven("https://repo.hypera.dev/snapshots/")
 }
 
 dependencies {
     implementation(project(":common"))
     implementation("net.minestom:minestom-snapshots:698af959c8")
     implementation("ch.qos.logback:logback-classic:1.5.3")
+    implementation("dev.lu15:luckperms-minestom:5.4-SNAPSHOT")
+    implementation("org.mongodb:mongodb-driver-legacy:4.5.0")
+    implementation("com.zaxxer:HikariCP:4.0.3")
+    implementation("org.mariadb.jdbc:mariadb-java-client:3.3.2")
 }
 
 java {

@@ -7,20 +7,14 @@ import dev.kyriji.common.inventory.models.hooks.TritonItemStackHook;
 import dev.kyriji.common.inventory.records.InventoryClickInfo;
 import dev.kyriji.common.models.TritonPlayer;
 import dev.kyriji.minestom.inventory.InventoryPanel;
-import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.inventory.InventoryCloseEvent;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
-import net.minestom.server.inventory.AbstractInventory;
-import net.minestom.server.inventory.Inventory;
-import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-import java.util.function.Consumer;
 
 public class MinestomInventoryHook implements TritonInventoryHook {
 	public Map<Integer, InventoryPanel> panelMap = new HashMap<>();

@@ -1,26 +1,27 @@
 package dev.kyriji.common.config.documents;
 
 import dev.kyriji.common.config.models.ConfigDocument;
+import dev.kyriji.common.config.models.MongoConnection;
+import dev.kyriji.common.config.models.SqlConnection;
 
 public class CoreConfig extends ConfigDocument {
 
-	String mongoPlayerDataURI = "NULL";
-	String mongoPlayerDataDatabase = "NULL";
+	MongoConnection playerDataConnection = new MongoConnection();
+	SqlConnection luckPermsConnection = new SqlConnection();
 
-	public String getMongoPlayerDataURI() {
-		return mongoPlayerDataURI;
+	public MongoConnection getPlayerDataConnection() {
+		return playerDataConnection;
 	}
 
-	public void setMongoPlayerDataURI(String mongoPlayerDataURI) {
-		this.mongoPlayerDataURI = mongoPlayerDataURI;
+	public void setPlayerDataConnection(MongoConnection playerDataConnection) {
+		this.playerDataConnection = playerDataConnection;
 	}
 
-	public String getMongoPlayerDataDatabase() {
-		return mongoPlayerDataDatabase;
+	public SqlConnection getLuckPermsConnection() {
+		return luckPermsConnection;
 	}
 
-	public void setMongoPlayerDataDatabase(String mongoPlayerDataDatabase) {
-		this.mongoPlayerDataDatabase = mongoPlayerDataDatabase;
+	public void setLuckPermsConnection(SqlConnection luckPermsConnection) {
+		this.luckPermsConnection = luckPermsConnection;
 	}
-
 }

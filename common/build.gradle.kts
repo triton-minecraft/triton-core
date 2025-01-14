@@ -10,5 +10,6 @@ repositories {
 }
 
 dependencies {
-    implementation("org.mongodb:mongodb-driver-sync:5.2.1")
+    implementation("org.mongodb:mongodb-driver-legacy:4.5.0")
+    compileOnly("net.luckperms:api:5.4")
 }
