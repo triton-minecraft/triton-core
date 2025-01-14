@@ -2,6 +2,9 @@ package dev.kyriji.spigot.implementation;
 
 import dev.kyriji.common.models.TritonCommandSender;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 public class SpigotCommandSender implements TritonCommandSender {
 	public CommandSender sender;
@@ -13,6 +16,11 @@ public class SpigotCommandSender implements TritonCommandSender {
 	@Override
 	public void sendMessage(String message) {
 		sender.sendMessage(message);
+	}
+
+	@Override
+	public UUID getUuid() {
+		return sender instanceof Player player ? player.getUniqueId() : null;
 	}
 
 	@Override

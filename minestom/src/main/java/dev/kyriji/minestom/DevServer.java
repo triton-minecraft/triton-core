@@ -1,10 +1,14 @@
 package dev.kyriji.minestom;
 
+import dev.kyriji.common.config.controllers.ConfigManager;
+import dev.kyriji.common.config.documents.CoreConfig;
+import dev.kyriji.common.config.enums.ConfigType;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
+import net.minestom.server.extras.velocity.VelocityProxy;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.Block;
@@ -30,8 +34,15 @@ public class DevServer {
 		});
 
 		// Start the server on port 25565
-		minecraftServer.start("0.0.0.0", 25566);
+		minecraftServer.start("0.0.0.0", 25565);
 
 		TritonCoreMinestom.init();
+
+		CoreConfig coreConfig = ConfigManager.getConfig(ConfigType.CORE);
+		if(coreConfig == null) throw new NullPointerException("Core config not found");
+
+		//only enable in dev env
+		if(System.getenv("ENV") != null && System.getenv("ENV").equals("prod"))
+			VelocityProxy.enable(coreConfig.getVelocitySecret());
 	}
 }

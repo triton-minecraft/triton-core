@@ -1,5 +1,7 @@
 package dev.kyriji.common.commands.models;
 
+import dev.kyriji.common.TritonCoreCommon;
+import dev.kyriji.common.chat.controllers.ChatManager;
 import dev.kyriji.common.commands.enums.CommandType;
 import dev.kyriji.common.models.TritonCommandSender;
 

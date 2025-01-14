@@ -5,10 +5,15 @@ import dev.kyriji.common.chat.hooks.TritonChatHook;
 import dev.kyriji.common.commands.controllers.CommandManager;
 import dev.kyriji.common.commands.hooks.TritonCommandHook;
 import dev.kyriji.common.config.controllers.ConfigManager;
+import dev.kyriji.common.config.documents.CoreConfig;
+import dev.kyriji.common.config.enums.ConfigType;
 import dev.kyriji.common.config.hooks.TritonConfigHook;
+import dev.kyriji.common.config.models.RedisConnection;
 import dev.kyriji.common.inventory.controllers.InventoryManager;
 import dev.kyriji.common.inventory.models.hooks.TritonInventoryHook;
 import dev.kyriji.common.playerdata.controllers.PlayerDataManager;
+import dev.wiji.bigminecraftapi.BigMinecraftAPI;
+import dev.wiji.bigminecraftapi.objects.ApiSettings;
 
 public class TritonCoreCommon {
 	public static TritonCoreCommon INSTANCE;
@@ -20,11 +25,26 @@ public class TritonCoreCommon {
 	private final ChatManager chatManager;
 
 	private TritonCoreCommon(Builder builder) {
+		ApiSettings settings = new ApiSettings();
+
+		CoreConfig coreConfig = ConfigManager.getConfig(ConfigType.CORE);
+		if(coreConfig == null) throw new NullPointerException("Core config not found");
+
+		RedisConnection redisConnection = coreConfig.getRedisConnection();
+		if(redisConnection == null) throw new NullPointerException("Redis connection not found");
+
+		settings.setRedisHost(redisConnection.getHost());
+		settings.setRedisPort(redisConnection.getPort());
+
+		BigMinecraftAPI.init(settings);
+
 		this.configManager = builder.configManager;
 		this.commandManager = builder.commandManager;
 		this.playerDataManager = builder.playerDataManager;
 		this.inventoryManager = builder.inventoryManager;
 		this.chatManager = builder.chatManager;
+
+		chatManager.init();
 
 		INSTANCE = this;
 	}

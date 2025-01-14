@@ -72,6 +72,7 @@ public abstract class InventoryPanel {
 	public void close() {
 		closable = true;
 		player.closeInventory();
+		unregisterEvents();
 	}
 
 	public void updateInventory() {

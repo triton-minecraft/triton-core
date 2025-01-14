@@ -1,9 +1,6 @@
 package dev.kyriji.common.commands.controllers;
 
-import dev.kyriji.common.commands.commands.InventoryTestCommand;
-import dev.kyriji.common.commands.commands.PlayerDataTestCommand;
-import dev.kyriji.common.commands.commands.ProxyCommand;
-import dev.kyriji.common.commands.commands.TestCommand;
+import dev.kyriji.common.commands.commands.*;
 import dev.kyriji.common.commands.hooks.TritonCommandHook;
 import dev.kyriji.common.commands.models.TritonCommand;
 
@@ -22,6 +19,7 @@ public class CommandManager {
 		registerCommand(new ProxyCommand());
 		registerCommand(new PlayerDataTestCommand());
 		registerCommand(new InventoryTestCommand());
+		registerCommand(new MsgCommand());
 
 		commands.forEach(hook::registerCommand);
 	}

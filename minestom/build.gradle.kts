@@ -9,6 +9,7 @@ version = ""
 repositories {
     mavenCentral()
     maven("https://repo.hypera.dev/snapshots/")
+    maven("https://jitpack.io")
 }
 
 dependencies {
@@ -30,7 +31,7 @@ java {
 tasks {
     jar {
         manifest {
-            attributes["Main-Class"] = "org.example.Main" // Change this to your main class
+            attributes["Main-Class"] = "dev.kyriji.minestom.DevServer" // Change this to your main class
         }
     }
 

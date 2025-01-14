@@ -1,11 +1,6 @@
 package dev.kyriji.common.models;
 
-import java.util.UUID;
-
-public interface TritonPlayer {
-	UUID getUuid();
-
-	String getName();
+public interface TritonPlayer extends TritonProfile{
 
 	void sendMessage(String message);
 }
