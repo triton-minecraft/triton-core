@@ -9,7 +9,9 @@ import dev.kyriji.common.config.models.MongoConnection;
 import dev.kyriji.common.database.controllers.DatabaseManager;
 import dev.kyriji.common.database.enums.DatabaseType;
 import dev.kyriji.common.database.records.DatabaseConnection;
+import dev.kyriji.common.models.TritonPlayer;
 import dev.kyriji.common.playerdata.enums.PlayerDataType;
+import dev.kyriji.common.playerdata.hooks.TritonPlayerDataHook;
 import dev.kyriji.common.playerdata.model.PlayerDataDocument;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
@@ -21,10 +23,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.type;
 
 public class PlayerDataManager {
 
-	private static final int MAX_RETRY_ATTEMPTS = 30;
+	private static final int MAX_RETRY_ATTEMPTS = 60;
 	private static final long RETRY_DELAY_MS = 1000;
 	private static final long STARTUP_DELAY_MS = 1000;
 
@@ -33,7 +36,11 @@ public class PlayerDataManager {
 	private LuckPerms luckPerms;
 	private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
-	public PlayerDataManager() {
+	private final TritonPlayerDataHook hook;
+
+	public PlayerDataManager(TritonPlayerDataHook hook) {
+		this.hook = hook;
+
 		CoreConfig config = ConfigManager.getConfig(ConfigType.CORE);
 		if(config == null) throw new NullPointerException("Core config not found");
 
@@ -41,6 +48,7 @@ public class PlayerDataManager {
 		DatabaseManager.addDatabase(DatabaseType.PLAYER_DATA, playerDataConnection.getUri(), playerDataConnection.getDatabase());
 
 		initializeLuckPerms();
+		registerEventHooks();
 	}
 
 	private void initializeLuckPerms() {
@@ -63,6 +71,17 @@ public class PlayerDataManager {
 				logger.warning("LuckPerms not ready yet. Attempt " + attempts[0] + " of " + MAX_RETRY_ATTEMPTS);
 			}
 		}, STARTUP_DELAY_MS, RETRY_DELAY_MS, TimeUnit.MILLISECONDS);
+	}
+
+	private void registerEventHooks() {
+		List<PlayerDataType> types = hook.getAutoLoadedDataTypes();
+		if(!types.contains(PlayerDataType.NETWORK)) types.add(PlayerDataType.NETWORK);
+
+		hook.registerJoinCallback(player -> {
+			types.forEach(type -> getPlayerData(player.getUuid(), type));
+		});
+
+		hook.registerQuitCallback(player -> unloadPlayerData(player.getUuid()));
 	}
 
 	private static final Map<UUID, List<PlayerDataDocument>> loadedPlayerData = new HashMap<>();
@@ -98,6 +117,10 @@ public class PlayerDataManager {
 		}
 
 		return null;
+	}
+
+	private void unloadPlayerData(UUID uuid) {
+		loadedPlayerData.remove(uuid);
 	}
 
 	public static <T extends PlayerDataDocument> void savePlayerData(T document, PlayerDataType type) {

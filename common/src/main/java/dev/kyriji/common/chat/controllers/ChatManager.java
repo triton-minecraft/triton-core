@@ -2,8 +2,13 @@ package dev.kyriji.common.chat.controllers;
 
 import dev.kyriji.common.TritonCoreCommon;
 import dev.kyriji.common.chat.hooks.TritonChatHook;
+import dev.kyriji.common.commands.commands.MsgCommand;
+import dev.kyriji.common.commands.controllers.CommandManager;
 import dev.kyriji.common.models.TritonPlayer;
 import dev.kyriji.common.models.TritonProfile;
+import dev.kyriji.common.playerdata.controllers.PlayerDataManager;
+import dev.kyriji.common.playerdata.documents.NetworkData;
+import dev.kyriji.common.playerdata.enums.PlayerDataType;
 import dev.wiji.bigminecraftapi.BigMinecraftAPI;
 import dev.wiji.bigminecraftapi.controllers.RedisListener;
 import net.luckperms.api.LuckPerms;
@@ -22,14 +27,17 @@ public class ChatManager {
 	}
 
 	public void init() {
+		CommandManager commandManager = TritonCoreCommon.INSTANCE.getCommandManager();
+		if(commandManager == null) throw new NullPointerException("The command feature must be registered to use this feature");
+
+		commandManager.registerCommand(new MsgCommand());
+
 		hook.registerChatCallback((player, message) -> formatPlayerName(player) + formatMessage("&7: " + message));
 
 		//TODO: Move channel to enum
 		BigMinecraftAPI.getRedisManager().addListener(new RedisListener("private-message") {
 			@Override
 			public void onMessage(String s) {
-				System.out.println("Received messageEEEEEEEEEEE: " + s);
-
 				TritonProfile sender = new TritonProfile() {
 					@Override
 					public UUID getUuid() {
@@ -43,7 +51,6 @@ public class ChatManager {
 				};
 
 				List<TritonPlayer> onlinePlayers = hook.getOnlinePlayers();
-				System.out.println("Online players: " + onlinePlayers);
 
 				UUID RecipientUUID = UUID.fromString(s.split(" ")[2]);
 				TritonPlayer recipient = onlinePlayers.stream().filter(player -> player.getUuid()
@@ -53,6 +60,11 @@ public class ChatManager {
 
 				String message = String.join(" ", Arrays.copyOfRange(s.split(" "), 3, s.split(" ").length));
 				recipient.sendMessage(getFormattedPrivateMessage(sender, recipient, message));
+
+				NetworkData networkData = PlayerDataManager.getPlayerData(recipient.getUuid(), PlayerDataType.NETWORK);
+				if(networkData == null) return;
+
+				networkData.setLastPrivateMessageSender(sender.getUuid());
 			}
 		});
 	}

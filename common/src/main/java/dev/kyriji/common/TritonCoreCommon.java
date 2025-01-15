@@ -12,6 +12,7 @@ import dev.kyriji.common.config.models.RedisConnection;
 import dev.kyriji.common.inventory.controllers.InventoryManager;
 import dev.kyriji.common.inventory.models.hooks.TritonInventoryHook;
 import dev.kyriji.common.playerdata.controllers.PlayerDataManager;
+import dev.kyriji.common.playerdata.hooks.TritonPlayerDataHook;
 import dev.wiji.bigminecraftapi.BigMinecraftAPI;
 import dev.wiji.bigminecraftapi.objects.ApiSettings;
 
@@ -25,6 +26,8 @@ public class TritonCoreCommon {
 	private final ChatManager chatManager;
 
 	private TritonCoreCommon(Builder builder) {
+		INSTANCE = this;
+
 		ApiSettings settings = new ApiSettings();
 
 		CoreConfig coreConfig = ConfigManager.getConfig(ConfigType.CORE);
@@ -45,8 +48,6 @@ public class TritonCoreCommon {
 		this.chatManager = builder.chatManager;
 
 		chatManager.init();
-
-		INSTANCE = this;
 	}
 
 	public static Builder builder() {
@@ -93,8 +94,8 @@ public class TritonCoreCommon {
 			return this;
 		}
 
-		public Builder withPlayerData() {
-			this.playerDataManager = new PlayerDataManager();
+		public Builder withPlayerData(TritonPlayerDataHook playerDataHook) {
+			this.playerDataManager = new PlayerDataManager(playerDataHook);
 			return this;
 		}
 

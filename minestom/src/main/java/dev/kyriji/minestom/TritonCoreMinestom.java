@@ -6,8 +6,7 @@ import dev.kyriji.common.commands.hooks.TritonCommandHook;
 import dev.kyriji.common.config.hooks.TritonConfigHook;
 import dev.kyriji.common.inventory.models.hooks.TritonInventoryHook;
 import dev.kyriji.minestom.controllers.ConfigManager;
-import dev.kyriji.minestom.hooks.MinestomChatHook;
-import dev.kyriji.minestom.hooks.MinestomInventoryHook;
+import dev.kyriji.minestom.hooks.*;
 import dev.kyriji.minestom.implementation.MinestomCommandSender;
 import dev.kyriji.minestom.implementation.MinestomPlayer;
 import dev.kyriji.minestom.models.LuckpermsAdapter;
@@ -27,34 +26,11 @@ public class TritonCoreMinestom {
 	public static void init() {
 		ConfigManager.init();
 
-		TritonConfigHook configHook = ConfigManager::getValue;
-
-		TritonCommandHook commandHook = command -> {
-			if(command.getType() != CommandType.SERVER) return;
-
-			Command commandInstance = new Command(command.getIdentifier()) {{
-				setDefaultExecutor((sender, context) -> {
-					MinestomCommandSender minestomSender;
-
-					if(sender instanceof Player) minestomSender = new MinestomPlayer((Player) sender);
-					else minestomSender = new MinestomCommandSender(sender);
-
-					String[] args = context.getInput().split(" ");
-					command.execute(minestomSender, Arrays.copyOfRange(args, 1, args.length));
-				});
-			}};
-
-			MinecraftServer.getCommandManager().register(commandInstance);
-		};
-
-		TritonInventoryHook inventoryHook = new MinestomInventoryHook();
-
-
 		TritonCoreCommon core = TritonCoreCommon.builder()
-				.withConfig(configHook)
-				.withCommands(commandHook)
-				.withInventory(inventoryHook)
-				.withPlayerData()
+				.withConfig(new MinestomConfigHook())
+				.withCommands(new MinestomCommandHook())
+				.withInventory(new MinestomInventoryHook())
+				.withPlayerData(new MinestomPlayerDataHook())
 				.withChat(new MinestomChatHook())
 				.build();
 
