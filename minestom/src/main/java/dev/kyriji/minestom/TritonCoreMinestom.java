@@ -1,25 +1,15 @@
 package dev.kyriji.minestom;
 
 import dev.kyriji.common.TritonCoreCommon;
-import dev.kyriji.common.commands.enums.CommandType;
-import dev.kyriji.common.commands.hooks.TritonCommandHook;
-import dev.kyriji.common.config.hooks.TritonConfigHook;
-import dev.kyriji.common.inventory.models.hooks.TritonInventoryHook;
 import dev.kyriji.minestom.controllers.ConfigManager;
 import dev.kyriji.minestom.hooks.*;
-import dev.kyriji.minestom.implementation.MinestomCommandSender;
-import dev.kyriji.minestom.implementation.MinestomPlayer;
 import dev.kyriji.minestom.models.LuckpermsAdapter;
 import me.lucko.luckperms.common.config.generic.adapter.MultiConfigurationAdapter;
 import me.lucko.luckperms.minestom.CommandRegistry;
 import me.lucko.luckperms.minestom.LuckPermsMinestom;
 import net.luckperms.api.LuckPerms;
-import net.minestom.server.MinecraftServer;
-import net.minestom.server.command.builder.Command;
-import net.minestom.server.entity.Player;
 
 import java.nio.file.Path;
-import java.util.Arrays;
 
 public class TritonCoreMinestom {
 

@@ -3,7 +3,9 @@ package dev.kyriji.common.chat.controllers;
 import dev.kyriji.common.TritonCoreCommon;
 import dev.kyriji.common.chat.hooks.TritonChatHook;
 import dev.kyriji.common.commands.commands.MsgCommand;
+import dev.kyriji.common.commands.commands.ReplyCommand;
 import dev.kyriji.common.commands.controllers.CommandManager;
+import dev.kyriji.common.models.TritonCommandSender;
 import dev.kyriji.common.models.TritonPlayer;
 import dev.kyriji.common.models.TritonProfile;
 import dev.kyriji.common.playerdata.controllers.PlayerDataManager;
@@ -20,6 +22,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class ChatManager {
+	private static final String REDIS_CHANNEL = "private-message";
 	private final TritonChatHook hook;
 
 	public ChatManager(TritonChatHook hook) {
@@ -31,11 +34,12 @@ public class ChatManager {
 		if(commandManager == null) throw new NullPointerException("The command feature must be registered to use this feature");
 
 		commandManager.registerCommand(new MsgCommand());
+		commandManager.registerCommand(new ReplyCommand());
 
 		hook.registerChatCallback((player, message) -> formatPlayerName(player) + formatMessage("&7: " + message));
 
 		//TODO: Move channel to enum
-		BigMinecraftAPI.getRedisManager().addListener(new RedisListener("private-message") {
+		BigMinecraftAPI.getRedisManager().addListener(new RedisListener(REDIS_CHANNEL) {
 			@Override
 			public void onMessage(String s) {
 				TritonProfile sender = new TritonProfile() {
@@ -67,6 +71,16 @@ public class ChatManager {
 				networkData.setLastPrivateMessageSender(sender.getUuid());
 			}
 		});
+	}
+
+	public void sendPrivateMessage(TritonCommandSender sender, UUID recipientId, String message) {
+		String redisMessage = String.format("%s %s %s %s",
+				sender.getUuid().toString(),
+				sender.getName(),
+				recipientId.toString(),
+				message);
+
+		BigMinecraftAPI.getRedisManager().publish(REDIS_CHANNEL, redisMessage);
 	}
 
 	public String getFormattedPrivateMessage(TritonProfile sender, TritonProfile recipient, String message) {

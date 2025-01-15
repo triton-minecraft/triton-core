@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 public class MsgCommand extends TritonCommand {
 	private static final String COMMAND_USAGE = "&cUsage: /msg <player> <message>";
 	private static final String PLAYER_NOT_FOUND = "&cPlayer not found";
-	private static final String REDIS_CHANNEL = "private-message";
 
 	@Override
 	public String getIdentifier() {
@@ -59,7 +58,7 @@ public class MsgCommand extends TritonCommand {
 		UUID recipientId = recipientOptional.get();
 		String message = buildMessage(args);
 
-		sendPrivateMessage(sender, recipientId, message);
+		chatManager.sendPrivateMessage(sender, recipientId, message);
 		notifySender(sender, recipientId, message, chatManager);
 	}
 
@@ -82,16 +81,6 @@ public class MsgCommand extends TritonCommand {
 		return String.join(" ", Arrays.stream(args)
 				.skip(1)
 				.toArray(String[]::new));
-	}
-
-	private void sendPrivateMessage(TritonCommandSender sender, UUID recipientId, String message) {
-		String redisMessage = String.format("%s %s %s %s",
-				sender.getUuid().toString(),
-				sender.getName(),
-				recipientId.toString(),
-				message);
-
-		BigMinecraftAPI.getRedisManager().publish(REDIS_CHANNEL, redisMessage);
 	}
 
 	private void notifySender(TritonCommandSender sender, UUID recipientId, String message, ChatManager chatManager) {

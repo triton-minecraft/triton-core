@@ -6,3 +6,4 @@ commands:
   playerdata:
   inventory:
   msg:
+  reply:
