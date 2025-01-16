@@ -2,6 +2,8 @@ package dev.kyriji.common.chat.controllers;
 
 import dev.kyriji.common.TritonCoreCommon;
 import dev.kyriji.common.chat.hooks.TritonChatHook;
+import dev.kyriji.common.chat.interfaces.ChatProvider;
+import dev.kyriji.common.commands.commands.IgnoreCommand;
 import dev.kyriji.common.commands.commands.MsgCommand;
 import dev.kyriji.common.commands.commands.ReplyCommand;
 import dev.kyriji.common.commands.controllers.CommandManager;
@@ -35,42 +37,23 @@ public class ChatManager {
 
 		commandManager.registerCommand(new MsgCommand());
 		commandManager.registerCommand(new ReplyCommand());
+		commandManager.registerCommand(new IgnoreCommand());
 
-		hook.registerChatCallback((player, message) -> formatPlayerName(player) + formatMessage("&7: " + message));
-
-		//TODO: Move channel to enum
-		BigMinecraftAPI.getRedisManager().addListener(new RedisListener(REDIS_CHANNEL) {
+		hook.registerChatCallback(new ChatProvider() {
 			@Override
-			public void onMessage(String s) {
-				TritonProfile sender = new TritonProfile() {
-					@Override
-					public UUID getUuid() {
-						return UUID.fromString(s.split(" ")[0]);
-					}
+			public String work(TritonPlayer player, String message) {
+				return formatPlayerName(player) + formatMessage("&7: " + message);
+			}
 
-					@Override
-					public String getName() {
-						return s.split(" ")[1];
-					}
-				};
+			@Override
+			public List<UUID> getRecipients(TritonPlayer player, List<UUID> onlinePlayers) {
 
-				List<TritonPlayer> onlinePlayers = hook.getOnlinePlayers();
-
-				UUID RecipientUUID = UUID.fromString(s.split(" ")[2]);
-				TritonPlayer recipient = onlinePlayers.stream().filter(player -> player.getUuid()
-						.equals(RecipientUUID)).findFirst().orElse(null);
-
-				if(recipient == null) return;
-
-				String message = String.join(" ", Arrays.copyOfRange(s.split(" "), 3, s.split(" ").length));
-				recipient.sendMessage(getFormattedPrivateMessage(sender, recipient, message));
-
-				NetworkData networkData = PlayerDataManager.getPlayerData(recipient.getUuid(), PlayerDataType.NETWORK);
-				if(networkData == null) return;
-
-				networkData.setLastPrivateMessageSender(sender.getUuid());
+				onlinePlayers.removeIf(uuid -> isIgnored(uuid, player.getUuid()));
+				return onlinePlayers;
 			}
 		});
+
+		registerPrivateMessageListener();
 	}
 
 	public void sendPrivateMessage(TritonCommandSender sender, UUID recipientId, String message) {
@@ -121,5 +104,50 @@ public class ChatManager {
 
 	public String formatMessage(String message) {
 		return hook.formatMessage(message);
+	}
+
+	private void registerPrivateMessageListener() {
+		//TODO: Move channel to enum
+		BigMinecraftAPI.getRedisManager().addListener(new RedisListener(REDIS_CHANNEL) {
+			@Override
+			public void onMessage(String s) {
+				TritonProfile sender = new TritonProfile() {
+					@Override
+					public UUID getUuid() {
+						return UUID.fromString(s.split(" ")[0]);
+					}
+
+					@Override
+					public String getName() {
+						return s.split(" ")[1];
+					}
+				};
+
+				List<TritonPlayer> onlinePlayers = hook.getOnlinePlayers();
+
+				UUID RecipientUUID = UUID.fromString(s.split(" ")[2]);
+				TritonPlayer recipient = onlinePlayers.stream().filter(player -> player.getUuid()
+						.equals(RecipientUUID)).findFirst().orElse(null);
+
+				if(recipient == null) return;
+
+				NetworkData networkData = PlayerDataManager.getPlayerData(recipient.getUuid(), PlayerDataType.NETWORK);
+				if(networkData == null) return;
+
+				if(isIgnored(recipient.getUuid(), sender.getUuid())) return;
+
+				String message = String.join(" ", Arrays.copyOfRange(s.split(" "), 3, s.split(" ").length));
+				recipient.sendMessage(getFormattedPrivateMessage(sender, recipient, message));
+
+				networkData.setLastPrivateMessageSender(sender.getUuid().toString());
+			}
+		});
+	}
+
+	public boolean isIgnored(UUID player, UUID target) {
+		NetworkData playerData = PlayerDataManager.getTemporaryPlayerData(player, PlayerDataType.NETWORK);
+		if(playerData == null) throw new RuntimeException("Player data not found");
+
+		return playerData.getIgnoredPlayers().contains(target.toString());
 	}
 }

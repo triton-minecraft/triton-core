@@ -7,12 +7,15 @@ import dev.kyriji.spigot.TritonCoreSpigot;
 import dev.kyriji.spigot.chat.ChatFormatter;
 import dev.kyriji.spigot.implementation.SpigotPlayer;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class SpigotChatHook implements TritonChatHook, Listener {
 	ChatProvider chatCallback;
@@ -44,6 +47,13 @@ public class SpigotChatHook implements TritonChatHook, Listener {
 		SpigotPlayer player = new SpigotPlayer(event.getPlayer());
 
 		String updatedMessage = chatCallback.work(player, originalMessage);
+
+		List<UUID> recipients = chatCallback.getRecipients(player, new ArrayList<>(event.getRecipients().stream()
+				.map(Entity::getUniqueId)
+				.toList()));
+
+		event.getRecipients().removeIf(recipient -> !recipients.contains(recipient.getUniqueId()));
+
 		event.setFormat(updatedMessage);
 	}
 }

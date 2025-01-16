@@ -26,7 +26,7 @@ public class ReplyCommand extends TritonCommand {
 
 	@Override
 	public CommandType getType() {
-		return null;
+		return CommandType.SERVER;
 	}
 
 	@Override
@@ -47,11 +47,11 @@ public class ReplyCommand extends TritonCommand {
 		}
 
 		if(playerData.getLastPrivateMessageSender() == null) {
-			player.sendMessage(chatManager.formatMessage("&cYou haven't messaged anyone recently"));
+			player.sendMessage(chatManager.formatMessage("&cNo one has messaged you recently"));
 			return;
 		}
 
-		UUID recipientUUID = playerData.getLastPrivateMessageSender();
+		UUID recipientUUID = UUID.fromString(playerData.getLastPrivateMessageSender());
 
 		if(!isRecipientOnline(recipientUUID)) {
 			player.sendMessage(chatManager.formatMessage("&cThis player is no longer online"));
@@ -65,7 +65,6 @@ public class ReplyCommand extends TritonCommand {
 
 	private String buildMessage(String[] args) {
 		return String.join(" ", Arrays.stream(args)
-				.skip(1)
 				.toArray(String[]::new));
 	}
 

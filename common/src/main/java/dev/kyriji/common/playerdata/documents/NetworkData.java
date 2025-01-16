@@ -2,12 +2,15 @@ package dev.kyriji.common.playerdata.documents;
 
 import dev.kyriji.common.playerdata.model.PlayerDataDocument;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class NetworkData extends PlayerDataDocument {
 
 	private String name = null;
-	private UUID lastPrivateMessageSender = null;
+	private String lastPrivateMessageSender = null;
+	private List<String> ignoredPlayers = new ArrayList<>();
 
 	public NetworkData() {
 		super();
@@ -26,11 +29,19 @@ public class NetworkData extends PlayerDataDocument {
 		this.name = name;
 	}
 
-	public UUID getLastPrivateMessageSender() {
+	public String getLastPrivateMessageSender() {
 		return lastPrivateMessageSender;
 	}
 
-	public void setLastPrivateMessageSender(UUID lastPrivateMessageSender) {
+	public void setLastPrivateMessageSender(String lastPrivateMessageSender) {
 		this.lastPrivateMessageSender = lastPrivateMessageSender;
+	}
+
+	public List<String> getIgnoredPlayers() {
+		return ignoredPlayers;
+	}
+
+	public void setIgnoredPlayers(List<String> ignoredPlayers) {
+		this.ignoredPlayers = ignoredPlayers;
 	}
 }

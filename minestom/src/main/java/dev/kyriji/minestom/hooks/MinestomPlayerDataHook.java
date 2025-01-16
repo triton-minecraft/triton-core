@@ -12,6 +12,7 @@ import net.minestom.server.event.player.PlayerDisconnectEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 public class MinestomPlayerDataHook implements TritonPlayerDataHook {
@@ -24,7 +25,20 @@ public class MinestomPlayerDataHook implements TritonPlayerDataHook {
 	public void registerJoinCallback(Consumer<TritonProfile> callback) {
 		GlobalEventHandler handler = MinecraftServer.getGlobalEventHandler();
 		handler.addListener(AsyncPlayerPreLoginEvent.class, event -> {
-			callback.accept(new MinestomPlayer(event.getConnection().getPlayer()));
+
+			TritonProfile profile = new TritonProfile() {
+				@Override
+				public String getName() {
+					return event.getUsername();
+				}
+
+				@Override
+				public UUID getUuid() {
+					return event.getPlayerUuid();
+				}
+			};
+
+			callback.accept(profile);
 		});
 	}
 

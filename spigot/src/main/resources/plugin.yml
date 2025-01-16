@@ -6,4 +6,5 @@ commands:
   playerdata:
   inventory:
   msg:
-  reply:
+  r:
+  ignore:

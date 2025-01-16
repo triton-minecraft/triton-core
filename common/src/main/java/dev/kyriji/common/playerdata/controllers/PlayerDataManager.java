@@ -9,7 +9,7 @@ import dev.kyriji.common.config.models.MongoConnection;
 import dev.kyriji.common.database.controllers.DatabaseManager;
 import dev.kyriji.common.database.enums.DatabaseType;
 import dev.kyriji.common.database.records.DatabaseConnection;
-import dev.kyriji.common.models.TritonPlayer;
+import dev.kyriji.common.playerdata.documents.NetworkData;
 import dev.kyriji.common.playerdata.enums.PlayerDataType;
 import dev.kyriji.common.playerdata.hooks.TritonPlayerDataHook;
 import dev.kyriji.common.playerdata.model.PlayerDataDocument;
@@ -21,9 +21,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
-import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Filters.type;
+import static com.mongodb.client.model.Filters.*;
 
 public class PlayerDataManager {
 
@@ -74,25 +74,45 @@ public class PlayerDataManager {
 	}
 
 	private void registerEventHooks() {
-		List<PlayerDataType> types = hook.getAutoLoadedDataTypes();
+		List<PlayerDataType> types = new ArrayList<>(hook.getAutoLoadedDataTypes());
 		if(!types.contains(PlayerDataType.NETWORK)) types.add(PlayerDataType.NETWORK);
 
 		hook.registerJoinCallback(player -> {
 			types.forEach(type -> getPlayerData(player.getUuid(), type));
+
+			NetworkData data = getPlayerData(player.getUuid(), PlayerDataType.NETWORK);
+			if(data == null) throw new RuntimeException("Critical Error: Player data not found (This is bad)");
+			data.setName(player.getName());
 		});
 
-		hook.registerQuitCallback(player -> unloadPlayerData(player.getUuid()));
+		hook.registerQuitCallback(player -> {
+			loadedPlayerData.get(player.getUuid()).forEach(PlayerDataDocument::save);
+			unloadPlayerData(player.getUuid());
+		});
 	}
 
 	private static final Map<UUID, List<PlayerDataDocument>> loadedPlayerData = new HashMap<>();
 
-	public static <T extends PlayerDataDocument> T getPlayerData(UUID uuid, PlayerDataType type) {
+	public static <T extends PlayerDataDocument> T getTemporaryPlayerData(String name, PlayerDataType type) {
 		DatabaseConnection connection = DatabaseManager.getDatabase(DatabaseType.PLAYER_DATA);
 
-		loadedPlayerData.putIfAbsent(uuid, new ArrayList<>());
+		@SuppressWarnings("unchecked")
+		Class<T> documentClass = (Class<T>) type.getDocumentClass();
 
-		for(PlayerDataDocument document : loadedPlayerData.get(uuid)) {
-			if(document.getClass().equals(type.getDocumentClass())) return (T) document;
+		MongoCollection<T> collection = connection.database().getCollection(type.getCollectionName(), documentClass);
+
+		Pattern pattern = Pattern.compile("^" + Pattern.quote(name) + "$", Pattern.CASE_INSENSITIVE);
+
+		return collection.find(regex("name", pattern)).first();
+	}
+
+	public static <T extends PlayerDataDocument> T getTemporaryPlayerData(UUID uuid, PlayerDataType type) {
+		DatabaseConnection connection = DatabaseManager.getDatabase(DatabaseType.PLAYER_DATA);
+
+		if(loadedPlayerData.containsKey(uuid)) {
+			for(PlayerDataDocument document : loadedPlayerData.get(uuid)) {
+				if(document.getClass().equals(type.getDocumentClass())) return (T) document;
+			}
 		}
 
 		@SuppressWarnings("unchecked")
@@ -100,17 +120,25 @@ public class PlayerDataManager {
 
 		MongoCollection<T> collection = connection.database().getCollection(type.getCollectionName(), documentClass);
 
-		T foundUser = collection.find(eq("uuid", uuid.toString())).first();
+		return collection.find(eq("uuid", uuid.toString())).first();
+	}
 
-		if(foundUser != null) {
-			loadedPlayerData.get(uuid).add(foundUser);
-			return foundUser;
+	public static <T extends PlayerDataDocument> T getPlayerData(UUID uuid, PlayerDataType type) {
+		T document = getTemporaryPlayerData(uuid, type);
+		if(document != null) {
+			loadedPlayerData.putIfAbsent(uuid, new ArrayList<>());
+			loadedPlayerData.get(uuid).add(document);
+			return document;
 		}
+
+		@SuppressWarnings("unchecked")
+		Class<T> documentClass = (Class<T>) type.getDocumentClass();
 
 		try {
 			PlayerDataDocument newInstance = documentClass.newInstance();
 			newInstance.setUuid(uuid.toString());
 			loadedPlayerData.get(uuid).add(newInstance);
+			newInstance.save();
 			return (T) newInstance;
 		} catch (InstantiationException | IllegalAccessException e) {
 			e.printStackTrace();

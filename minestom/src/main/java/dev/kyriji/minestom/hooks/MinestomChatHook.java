@@ -14,10 +14,13 @@ import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.inventory.InventoryCloseEvent;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.event.player.PlayerChatEvent;
+import net.minestom.server.scoreboard.TabList;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 public class MinestomChatHook implements TritonChatHook {
@@ -41,9 +44,14 @@ public class MinestomChatHook implements TritonChatHook {
 
 					Component component = Component.text(updatedMessage);
 					event.setFormattedMessage(component);
+
+					List<UUID> recipients = callback.getRecipients(player, new ArrayList<>(event.getRecipients().stream()
+							.map(Player::getUuid)
+							.toList()));
+
+					event.getRecipients().removeIf(recipient -> !recipients.contains(recipient.getUuid()));
 				}).build()
 		);
-
 	}
 
 	@Override
