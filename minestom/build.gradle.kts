@@ -15,7 +15,7 @@ repositories {
 dependencies {
     implementation(project(":common"))
     compileOnly("net.minestom:minestom-snapshots:698af959c8")
-    compileOnly("ch.qos.logback:logback-classic:1.5.3")
+//    compileOnly("ch.qos.logback:logback-classic:1.5.3")
     compileOnly("dev.lu15:luckperms-minestom:5.4-SNAPSHOT")
     compileOnly("org.mongodb:mongodb-driver-legacy:4.5.0")
     compileOnly("com.zaxxer:HikariCP:4.0.3")
@@ -31,7 +31,7 @@ java {
 tasks {
     jar {
         manifest {
-            attributes["Main-Class"] = "dev.kyriji.minestom.DevServer"
+            attributes["Main-Class"] = "dev.kyriji.minestom.TritonCoreMinestom"
             attributes["Module-Name"] = "triton-core"
             attributes["Module-Dependencies"] = "minestom-dependencies"
         }

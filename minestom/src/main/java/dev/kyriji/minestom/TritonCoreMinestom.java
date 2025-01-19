@@ -48,6 +48,4 @@ public class TritonCoreMinestom {
 		if(System.getenv("ENV") != null && System.getenv("ENV").equals("prod"))
 			VelocityProxy.enable(coreConfig.getVelocitySecret());
 	}
-
-
 }
