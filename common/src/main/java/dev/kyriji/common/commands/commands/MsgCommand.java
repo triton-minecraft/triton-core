@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 public class MsgCommand extends TritonCommand {
 	private static final String COMMAND_USAGE = "&cUsage: /msg <player> <message>";
 	private static final String PLAYER_NOT_FOUND = "&cPlayer not found";
+	private static final String SELF_MESSAGE = "&cYou can't message yourself";
 
 	@Override
 	public String getIdentifier() {
@@ -52,6 +53,11 @@ public class MsgCommand extends TritonCommand {
 		Optional<UUID> recipientOptional = findRecipient(args[0]);
 		if (!recipientOptional.isPresent()) {
 			sender.sendMessage(chatManager.formatMessage(PLAYER_NOT_FOUND));
+			return;
+		}
+
+		if (recipientOptional.get().equals(sender.getUuid())) {
+			sender.sendMessage(chatManager.formatMessage(SELF_MESSAGE));
 			return;
 		}
 

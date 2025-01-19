@@ -82,6 +82,11 @@ public class IgnoreCommand extends TritonCommand {
 			return;
 		}
 
+		if(target.getUuid().equals(player.getUuid())) {
+			player.sendMessage(chatManager.formatMessage("&cYou cannot ignore yourself"));
+			return;
+		}
+
 		NetworkData playerData = PlayerDataManager.getPlayerData(player.getUuid(), PlayerDataType.NETWORK);
 		if(playerData == null) throw new RuntimeException("Player data not found");
 

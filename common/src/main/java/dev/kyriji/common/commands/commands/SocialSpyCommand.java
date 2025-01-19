@@ -40,12 +40,12 @@ public class SocialSpyCommand extends TritonCommand {
 		ChatManager chatManager = TritonCoreCommon.INSTANCE.getChatManager();
 
 		if(!(player instanceof TritonPlayer tritonPlayer)) {
-			player.sendMessage("&cYou must be a player to use this command");
+			player.sendMessage(chatManager.formatMessage("&cYou must be a player to use this command"));
 			return;
 		}
 
 		if(!tritonPlayer.hasPermission(Permission.STAFF.getIdentifier())) {
-			player.sendMessage("&cYou do not have permission to use this command");
+			player.sendMessage(chatManager.formatMessage("&cYou do not have permission to use this command"));
 			return;
 		}
 
@@ -55,6 +55,6 @@ public class SocialSpyCommand extends TritonCommand {
 		boolean currentStatus = playerData.getStaffData().isSocialSpyEnabled();
 		playerData.getStaffData().setSocialSpyEnabled(!currentStatus);
 
-		player.sendMessage(chatManager.formatMessage("&aSocial spy " + (currentStatus ? "disabled" : "enabled")));
+		player.sendMessage(chatManager.formatMessage((currentStatus ? "&c" : "&a") + "Social spy " + (currentStatus ? "disabled" : "enabled")));
 	}
 }

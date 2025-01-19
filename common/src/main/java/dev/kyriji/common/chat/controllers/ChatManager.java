@@ -6,6 +6,7 @@ import dev.kyriji.common.chat.interfaces.ChatProvider;
 import dev.kyriji.common.commands.commands.IgnoreCommand;
 import dev.kyriji.common.commands.commands.MsgCommand;
 import dev.kyriji.common.commands.commands.ReplyCommand;
+import dev.kyriji.common.commands.commands.SocialSpyCommand;
 import dev.kyriji.common.commands.controllers.CommandManager;
 import dev.kyriji.common.models.TritonPlayer;
 import dev.kyriji.common.models.TritonProfile;
@@ -35,6 +36,7 @@ public class ChatManager {
 		commandManager.registerCommand(new MsgCommand());
 		commandManager.registerCommand(new ReplyCommand());
 		commandManager.registerCommand(new IgnoreCommand());
+		commandManager.registerCommand(new SocialSpyCommand());
 
 		hook.registerChatCallback(new ChatProvider() {
 			@Override
