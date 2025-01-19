@@ -18,9 +18,7 @@ public class TritonCoreMinestom {
 	public static TritonCoreCommon core;
 	public static LuckPerms luckPerms;
 
-	public static void main(String[] args) {
-		init();
-	}
+	public static void main(String[] args) {}
 
 	public static void init() {
 		ConfigManager.init();
