@@ -13,6 +13,10 @@ import java.nio.file.Path;
 
 public class TritonCoreMinestom {
 
+	public static void main(String[] args) {
+		init();
+	}
+
 	public static void init() {
 		ConfigManager.init();
 
