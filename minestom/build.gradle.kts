@@ -44,6 +44,7 @@ tasks {
     shadowJar {
         mergeServiceFiles()
         archiveClassifier.set("")
+        archiveVersion.set("")
     }
 }
 
