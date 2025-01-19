@@ -34,7 +34,7 @@ tasks {
         manifest {
             attributes["Main-Class"] = "dev.kyriji.minestom.TritonCoreMinestom"
             attributes["Module-Name"] = "triton-core"
-            attributes["Module-Dependencies"] = "minestom-dependencies"
+            attributes["Module-Dependencies"] = "triton-dependencies"
         }
     }
 

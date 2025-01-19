@@ -1,6 +1,7 @@
 main: dev.kyriji.spigot.TritonCoreSpigot
 name: TritonCoreSpigot
 version: 1.0.0
+depend: [TritonDependencies]
 commands:
   test:
   playerdata:
@@ -8,3 +9,4 @@ commands:
   msg:
   r:
   ignore:
+  socialspy:

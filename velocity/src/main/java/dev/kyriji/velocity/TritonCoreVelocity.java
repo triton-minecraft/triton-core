@@ -1,23 +1,15 @@
 package dev.kyriji.velocity;
 
 import com.google.inject.Inject;
-import com.velocitypowered.api.command.CommandMeta;
-import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.Plugin;
-import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import dev.kyriji.common.TritonCoreCommon;
-import dev.kyriji.common.commands.enums.CommandType;
-import dev.kyriji.common.commands.hooks.TritonCommandHook;
-import dev.kyriji.common.config.hooks.TritonConfigHook;
 import dev.kyriji.velocity.controllers.ConfigManager;
 import dev.kyriji.velocity.hooks.VelocityCommandHook;
 import dev.kyriji.velocity.hooks.VelocityConfigHook;
 import dev.kyriji.velocity.hooks.VelocityPlayerDataHook;
-import dev.kyriji.velocity.implementation.VelocityCommandSender;
-import dev.kyriji.velocity.implementation.VelocityPlayer;
 
 import java.util.logging.Logger;
 

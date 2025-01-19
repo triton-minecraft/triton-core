@@ -49,8 +49,25 @@ public class PrivateMessageManager {
 				List<TritonPlayer> onlinePlayers = chatHook.getOnlinePlayers();
 
 				UUID RecipientUUID = UUID.fromString(s.split(" ")[2]);
-				TritonPlayer recipient = onlinePlayers.stream().filter(player -> player.getUuid()
+				TritonProfile recipient = onlinePlayers.stream().filter(player -> player.getUuid()
 						.equals(RecipientUUID)).findFirst().orElse(null);
+
+				if(recipient == null) {
+					String playerName = BigMinecraftAPI.getNetworkManager().getPlayers().get(RecipientUUID);
+					if(playerName == null) return;
+
+					recipient = new TritonProfile() {
+						@Override
+						public UUID getUuid() {
+							return RecipientUUID;
+						}
+
+						@Override
+						public String getName() {
+							return playerName;
+						}
+					};
+				}
 
 				String message = getFormattedPrivateMessage(sender, recipient, String.join(" ", Arrays.copyOfRange(s.split(" "), 3, s.split(" ").length)));
 
@@ -62,14 +79,14 @@ public class PrivateMessageManager {
 					if(networkData.getStaffData().isSocialSpyEnabled()) tritonPlayer.sendMessage(formatSocialSpyMessage(message));
 				}
 
-				if(recipient == null) return;
+				if(!(recipient instanceof TritonPlayer)) return;
 
 				NetworkData networkData = PlayerDataManager.getPlayerData(recipient.getUuid(), PlayerDataType.NETWORK);
 				if(networkData == null) return;
 
 				if(chatManager.isIgnored(recipient.getUuid(), sender.getUuid())) return;
 
-				recipient.sendMessage(message);
+				((TritonPlayer) recipient).sendMessage(message);
 
 				networkData.setLastPrivateMessageSender(sender.getUuid().toString());
 			}
