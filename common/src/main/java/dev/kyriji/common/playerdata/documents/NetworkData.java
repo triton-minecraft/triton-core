@@ -1,6 +1,7 @@
 package dev.kyriji.common.playerdata.documents;
 
 import dev.kyriji.common.playerdata.model.PlayerDataDocument;
+import dev.kyriji.common.playerdata.model.StaffData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ public class NetworkData extends PlayerDataDocument {
 	private String name = null;
 	private String lastPrivateMessageSender = null;
 	private List<String> ignoredPlayers = new ArrayList<>();
+	private StaffData staffData = new StaffData();
 
 	public NetworkData() {
 		super();
@@ -43,5 +45,13 @@ public class NetworkData extends PlayerDataDocument {
 
 	public void setIgnoredPlayers(List<String> ignoredPlayers) {
 		this.ignoredPlayers = ignoredPlayers;
+	}
+
+	public StaffData getStaffData() {
+		return staffData;
+	}
+
+	public void setStaffData(StaffData staffData) {
+		this.staffData = staffData;
 	}
 }

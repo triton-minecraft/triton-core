@@ -58,7 +58,7 @@ public class ReplyCommand extends TritonCommand {
 			return;
 		}
 
-		chatManager.sendPrivateMessage(player, recipientUUID, buildMessage(args));
+		chatManager.getPrivateMessageManager().sendPrivateMessage(player, recipientUUID, buildMessage(args));
 
 		notifySender(player, recipientUUID, buildMessage(args), chatManager);
 	}
@@ -70,7 +70,7 @@ public class ReplyCommand extends TritonCommand {
 
 	private void notifySender(TritonCommandSender sender, UUID recipientId, String message, ChatManager chatManager) {
 		TritonProfile recipientProfile = createRecipientProfile(recipientId);
-		sender.sendMessage(chatManager.getFormattedPrivateMessage(sender, recipientProfile, message));
+		sender.sendMessage(chatManager.getPrivateMessageManager().getFormattedPrivateMessage(sender, recipientProfile, message));
 	}
 
 	private TritonProfile createRecipientProfile(UUID recipientId) {

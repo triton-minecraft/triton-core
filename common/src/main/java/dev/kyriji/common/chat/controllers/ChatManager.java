@@ -7,25 +7,22 @@ import dev.kyriji.common.commands.commands.IgnoreCommand;
 import dev.kyriji.common.commands.commands.MsgCommand;
 import dev.kyriji.common.commands.commands.ReplyCommand;
 import dev.kyriji.common.commands.controllers.CommandManager;
-import dev.kyriji.common.models.TritonCommandSender;
 import dev.kyriji.common.models.TritonPlayer;
 import dev.kyriji.common.models.TritonProfile;
 import dev.kyriji.common.playerdata.controllers.PlayerDataManager;
 import dev.kyriji.common.playerdata.documents.NetworkData;
 import dev.kyriji.common.playerdata.enums.PlayerDataType;
-import dev.wiji.bigminecraftapi.BigMinecraftAPI;
-import dev.wiji.bigminecraftapi.controllers.RedisListener;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.user.User;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 public class ChatManager {
-	private static final String REDIS_CHANNEL = "private-message";
 	private final TritonChatHook hook;
+	private PrivateMessageManager privateMessageManager;
+	private StaffChatManager staffChatManager;
 
 	public ChatManager(TritonChatHook hook) {
 		this.hook = hook;
@@ -53,21 +50,8 @@ public class ChatManager {
 			}
 		});
 
-		registerPrivateMessageListener();
-	}
-
-	public void sendPrivateMessage(TritonCommandSender sender, UUID recipientId, String message) {
-		String redisMessage = String.format("%s %s %s %s",
-				sender.getUuid().toString(),
-				sender.getName(),
-				recipientId.toString(),
-				message);
-
-		BigMinecraftAPI.getRedisManager().publish(REDIS_CHANNEL, redisMessage);
-	}
-
-	public String getFormattedPrivateMessage(TritonProfile sender, TritonProfile recipient, String message) {
-		return formatMessage(formatPlayerName(sender) + "&7 -> " + formatPlayerName(recipient) + "&7: " + formatMessage(message));
+		privateMessageManager = new PrivateMessageManager(hook, this);
+		staffChatManager = new StaffChatManager(hook, this);
 	}
 
 	public String formatPlayerName(TritonProfile player) {
@@ -106,48 +90,18 @@ public class ChatManager {
 		return hook.formatMessage(message);
 	}
 
-	private void registerPrivateMessageListener() {
-		//TODO: Move channel to enum
-		BigMinecraftAPI.getRedisManager().addListener(new RedisListener(REDIS_CHANNEL) {
-			@Override
-			public void onMessage(String s) {
-				TritonProfile sender = new TritonProfile() {
-					@Override
-					public UUID getUuid() {
-						return UUID.fromString(s.split(" ")[0]);
-					}
-
-					@Override
-					public String getName() {
-						return s.split(" ")[1];
-					}
-				};
-
-				List<TritonPlayer> onlinePlayers = hook.getOnlinePlayers();
-
-				UUID RecipientUUID = UUID.fromString(s.split(" ")[2]);
-				TritonPlayer recipient = onlinePlayers.stream().filter(player -> player.getUuid()
-						.equals(RecipientUUID)).findFirst().orElse(null);
-
-				if(recipient == null) return;
-
-				NetworkData networkData = PlayerDataManager.getPlayerData(recipient.getUuid(), PlayerDataType.NETWORK);
-				if(networkData == null) return;
-
-				if(isIgnored(recipient.getUuid(), sender.getUuid())) return;
-
-				String message = String.join(" ", Arrays.copyOfRange(s.split(" "), 3, s.split(" ").length));
-				recipient.sendMessage(getFormattedPrivateMessage(sender, recipient, message));
-
-				networkData.setLastPrivateMessageSender(sender.getUuid().toString());
-			}
-		});
-	}
-
 	public boolean isIgnored(UUID player, UUID target) {
 		NetworkData playerData = PlayerDataManager.getTemporaryPlayerData(player, PlayerDataType.NETWORK);
 		if(playerData == null) throw new RuntimeException("Player data not found");
 
 		return playerData.getIgnoredPlayers().contains(target.toString());
+	}
+
+	public PrivateMessageManager getPrivateMessageManager() {
+		return privateMessageManager;
+	}
+
+	public StaffChatManager getStaffChatManager() {
+		return staffChatManager;
 	}
 }

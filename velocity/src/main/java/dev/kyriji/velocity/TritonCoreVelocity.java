@@ -13,6 +13,8 @@ import dev.kyriji.common.commands.enums.CommandType;
 import dev.kyriji.common.commands.hooks.TritonCommandHook;
 import dev.kyriji.common.config.hooks.TritonConfigHook;
 import dev.kyriji.velocity.controllers.ConfigManager;
+import dev.kyriji.velocity.hooks.VelocityConfigHook;
+import dev.kyriji.velocity.hooks.VelocityPlayerDataHook;
 import dev.kyriji.velocity.implementation.VelocityCommandSender;
 import dev.kyriji.velocity.implementation.VelocityPlayer;
 
@@ -29,34 +31,21 @@ public class TritonCoreVelocity {
 	public TritonCoreVelocity(ProxyServer server, Logger logger) {
 		INSTANCE = server;
 		this.logger = logger;
+
+
 	}
 
 	@Subscribe
 	public void onProxyInitialize(ProxyInitializeEvent event) {
 		ConfigManager.init();
 
-		TritonConfigHook configHook = ConfigManager::getValue;
-
-		TritonCommandHook commandHook = command -> {
-			if(command.getType() != CommandType.SERVER) return;
-
-			CommandMeta commandMeta = INSTANCE.getCommandManager().metaBuilder(command.getIdentifier())
-					.build();
-
-			INSTANCE.getCommandManager().register(commandMeta, (SimpleCommand) invocation -> {
-				VelocityCommandSender velocitySender;
-
-				if(invocation.source() instanceof Player) velocitySender = new VelocityPlayer((Player) invocation.source());
-				else velocitySender = new VelocityCommandSender(invocation.source());
-
-				command.execute(velocitySender, invocation.arguments());
-			});
-		};
+		VelocityPlayerDataHook playerData = new VelocityPlayerDataHook();
+		INSTANCE.getEventManager().register(this, playerData);
 
 		TritonCoreCommon core = TritonCoreCommon.builder()
-				.withConfig(configHook)
-				.withCommands(commandHook)
-				// .withPlayerData()
+				.withConfig()
+				.withCommands()
+				 .withPlayerData(playerData)
 				.build();
 
 	}

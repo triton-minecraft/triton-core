@@ -24,4 +24,9 @@ public class VelocityPlayer extends VelocityCommandSender implements TritonPlaye
 	public void sendMessage(String message) {
 		player.sendMessage(Component.text(message));
 	}
+
+	@Override
+	public boolean hasPermission(String permission) {
+		return player.hasPermission(permission);
+	}
 }

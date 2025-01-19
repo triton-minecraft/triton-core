@@ -58,7 +58,7 @@ public class MsgCommand extends TritonCommand {
 		UUID recipientId = recipientOptional.get();
 		String message = buildMessage(args);
 
-		chatManager.sendPrivateMessage(sender, recipientId, message);
+		chatManager.getPrivateMessageManager().sendPrivateMessage(sender, recipientId, message);
 		notifySender(sender, recipientId, message, chatManager);
 	}
 
@@ -85,7 +85,7 @@ public class MsgCommand extends TritonCommand {
 
 	private void notifySender(TritonCommandSender sender, UUID recipientId, String message, ChatManager chatManager) {
 		TritonProfile recipientProfile = createRecipientProfile(recipientId);
-		sender.sendMessage(chatManager.getFormattedPrivateMessage(sender, recipientProfile, message));
+		sender.sendMessage(chatManager.getPrivateMessageManager().getFormattedPrivateMessage(sender, recipientProfile, message));
 	}
 
 	private TritonProfile createRecipientProfile(UUID recipientId) {
