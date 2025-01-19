@@ -3,6 +3,7 @@ package dev.kyriji.velocity;
 import com.google.inject.Inject;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
+import com.velocitypowered.api.plugin.Dependency;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.proxy.ProxyServer;
 import dev.kyriji.common.TritonCoreCommon;
@@ -13,8 +14,17 @@ import dev.kyriji.velocity.hooks.VelocityPlayerDataHook;
 
 import java.util.logging.Logger;
 
-@Plugin(id = "triton-core", name = "TritonCore", version = "1.0",
-		url = "https://github.com/triton-minecraft/triton-core", description = "A Core system for the TritonMC Network", authors = {"wiji, Kyro"})
+@Plugin(
+	id = "triton-core",
+	name = "TritonCore",
+	version = "1.0",
+	url = "https://github.com/triton-minecraft/triton-core",
+	description = "A Core system for the TritonMC Network",
+	authors = {"wiji, Kyro"},
+	dependencies = {
+		@Dependency(id = "triton-dependencies")
+	}
+)
 public class TritonCoreVelocity {
 
 	public static ProxyServer INSTANCE;
