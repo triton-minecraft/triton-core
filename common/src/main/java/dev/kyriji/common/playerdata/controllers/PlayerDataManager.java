@@ -137,6 +137,7 @@ public class PlayerDataManager {
 		try {
 			PlayerDataDocument newInstance = documentClass.newInstance();
 			newInstance.setUuid(uuid.toString());
+			loadedPlayerData.putIfAbsent(uuid, new ArrayList<>());
 			loadedPlayerData.get(uuid).add(newInstance);
 			newInstance.save();
 			return (T) newInstance;
