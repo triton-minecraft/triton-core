@@ -12,7 +12,7 @@ public class TritonCoreSpigot extends JavaPlugin {
 	public void onEnable() {
 		INSTANCE = this;
 
-		ConfigManager.init();
+		ConfigManager.init(this);
 
 		TritonCoreCommon common = TritonCoreCommon.builder()
 				.withCommands(new SpigotCommandHook())

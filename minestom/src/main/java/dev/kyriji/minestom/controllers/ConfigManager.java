@@ -2,12 +2,11 @@ package dev.kyriji.minestom.controllers;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.stream.JsonReader;
 
 import java.io.*;
 
 public class ConfigManager {
-	private static final String CONFIG_RESOURCE = "/config.json";
+	private static final String CONFIG_FILE = "./config.json";
 	private static JsonObject config;
 	private static final Gson gson = new Gson();
 
@@ -16,16 +15,18 @@ public class ConfigManager {
 	}
 
 	private static void loadConfig() {
-		try (InputStream is = ConfigManager.class.getResourceAsStream(CONFIG_RESOURCE)) {
-			if (is == null) {
-				throw new IllegalStateException("Config resource not found: " + CONFIG_RESOURCE);
-			}
+		File configFile = new File(CONFIG_FILE);
 
-			try (JsonReader reader = new JsonReader(new InputStreamReader(is))) {
-				config = gson.fromJson(reader, JsonObject.class);
-			}
+		if (!configFile.exists()) {
+			System.out.println("config file not found: " + CONFIG_FILE);
+			throw new RuntimeException("config file not found: " + CONFIG_FILE);
+		}
+
+		try (FileReader reader = new FileReader(configFile)) {
+			config = gson.fromJson(reader, JsonObject.class);
+			System.out.println("loaded config from " + CONFIG_FILE);
 		} catch (IOException e) {
-			throw new RuntimeException("Failed to load config from resources", e);
+			throw new RuntimeException("failed to load config file: " + CONFIG_FILE, e);
 		}
 	}
 
