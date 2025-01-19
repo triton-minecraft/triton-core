@@ -47,7 +47,7 @@ public class TritonCoreCommon {
 		this.inventoryManager = builder.inventoryManager;
 		this.chatManager = builder.chatManager;
 
-		chatManager.init();
+		if (chatManager != null) chatManager.init();
 	}
 
 	public static Builder builder() {

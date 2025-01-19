@@ -36,8 +36,5 @@ public class TritonCoreMinestom {
 						new LuckpermsAdapter(plugin)
 				)).dependencyManager(true)
 				.enable();
-
 	}
-
-
 }
