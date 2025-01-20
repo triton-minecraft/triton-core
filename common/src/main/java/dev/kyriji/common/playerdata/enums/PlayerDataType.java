@@ -1,14 +1,14 @@
 package dev.kyriji.common.playerdata.enums;
 
 import dev.kyriji.common.playerdata.documents.NetworkData;
-import dev.kyriji.common.playerdata.model.PlayerDataDocument;
+import dev.kyriji.common.playerdata.documents.PunishmentData;
+import dev.kyriji.common.playerdata.models.PlayerDataDocument;
 
 public enum PlayerDataType {
 
 	NETWORK("network", NetworkData.class),
+	PUNISHMENT("punishment", PunishmentData.class),
 	;
-
-
 
 	private final String collectionName;
 	private final Class<? extends PlayerDataDocument> documentClass;

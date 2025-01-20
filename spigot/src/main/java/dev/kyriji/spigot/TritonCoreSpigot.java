@@ -20,6 +20,7 @@ public class TritonCoreSpigot extends JavaPlugin {
 				.withInventory(new SpigotInventoryHook())
 				.withChat(new SpigotChatHook())
 				.withPlayerData(new SpigotPlayerDataHook())
+				.withPunishments(new SpigotPunishmentHook())
 				.build();
 	}
 }

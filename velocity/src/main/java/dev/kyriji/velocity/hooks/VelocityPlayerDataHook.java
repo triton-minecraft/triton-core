@@ -13,8 +13,8 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 public class VelocityPlayerDataHook implements TritonPlayerDataHook {
-	Consumer<TritonProfile> joinCallback;
-	Consumer<TritonProfile> quitCallback;
+	private Consumer<TritonProfile> joinCallback;
+	private Consumer<TritonProfile> quitCallback;
 
 	@Override
 	public List<PlayerDataType> getAutoLoadedDataTypes() {
@@ -23,12 +23,12 @@ public class VelocityPlayerDataHook implements TritonPlayerDataHook {
 
 	@Override
 	public void registerJoinCallback(Consumer<TritonProfile> callback) {
-		joinCallback = callback;
+		this.joinCallback = callback;
 	}
 
 	@Override
 	public void registerQuitCallback(Consumer<TritonProfile> callback) {
-		quitCallback = callback;
+		this.quitCallback = callback;
 	}
 
 	@Subscribe

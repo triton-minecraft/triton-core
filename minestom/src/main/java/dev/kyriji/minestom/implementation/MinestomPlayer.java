@@ -38,4 +38,9 @@ public class MinestomPlayer extends MinestomCommandSender implements TritonPlaye
 
 		return user.getCachedData().getPermissionData(queryOptions).checkPermission(permission).asBoolean();
 	}
+
+	@Override
+	public void disconnect(String reason) {
+		player.kick(reason);
+	}
 }

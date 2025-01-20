@@ -29,6 +29,7 @@ public class TritonCoreMinestom {
 				.withInventory(new MinestomInventoryHook())
 				.withPlayerData(new MinestomPlayerDataHook())
 				.withChat(new MinestomChatHook())
+				.withPunishments(new MinestomPunishmentHook())
 				.build();
 
 		Path directory = Path.of("luckperms");

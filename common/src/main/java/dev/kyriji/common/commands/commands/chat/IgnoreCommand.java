@@ -1,15 +1,16 @@
-package dev.kyriji.common.commands.commands;
+package dev.kyriji.common.commands.commands.chat;
 
 import dev.kyriji.common.TritonCoreCommon;
 import dev.kyriji.common.chat.controllers.ChatManager;
 import dev.kyriji.common.commands.enums.CommandType;
+import dev.kyriji.common.commands.enums.ExecutorType;
 import dev.kyriji.common.commands.models.TritonCommand;
 import dev.kyriji.common.models.TritonCommandSender;
 import dev.kyriji.common.models.TritonProfile;
 import dev.kyriji.common.playerdata.controllers.PlayerDataManager;
 import dev.kyriji.common.playerdata.documents.NetworkData;
 import dev.kyriji.common.playerdata.enums.PlayerDataType;
-import net.luckperms.api.LuckPerms;
+import dev.kyriji.common.playerdata.utils.PlayerDataUtils;
 
 import java.util.List;
 import java.util.UUID;
@@ -26,8 +27,13 @@ public class IgnoreCommand extends TritonCommand {
 	}
 
 	@Override
-	public CommandType getType() {
+	public CommandType getCommandType() {
 		return CommandType.SERVER;
+	}
+
+	@Override
+	public ExecutorType getExecutorType() {
+		return ExecutorType.PLAYER;
 	}
 
 	@Override
@@ -75,7 +81,7 @@ public class IgnoreCommand extends TritonCommand {
 		}
 
 		String targetString = args[1];
-		TritonProfile target = loadUser(targetString);
+		TritonProfile target = PlayerDataUtils.loadUser(targetString);
 
 		if(target == null) {
 			player.sendMessage(chatManager.formatMessage("&cPlayer not found"));
@@ -110,7 +116,7 @@ public class IgnoreCommand extends TritonCommand {
 		}
 
 		String targetString = args[1];
-		TritonProfile targetUser = loadUser(targetString);
+		TritonProfile targetUser = PlayerDataUtils.loadUser(targetString);
 
 		NetworkData playerData = PlayerDataManager.getPlayerData(player.getUuid(), PlayerDataType.NETWORK);
 		if(playerData == null) throw new RuntimeException("Player data not found");
@@ -146,7 +152,7 @@ public class IgnoreCommand extends TritonCommand {
 
 		player.sendMessage(chatManager.formatMessage("&8&m------ &7Ignored players &8&m------"));
 		ignoredPlayers.forEach(uuid -> {
-			TritonProfile user = loadUser(UUID.fromString(uuid));
+			TritonProfile user = PlayerDataUtils.loadUser(UUID.fromString(uuid));
 
 			if(user == null) return;
 			player.sendMessage(chatManager.formatMessage("&7- ") + chatManager.formatPlayerName(user));
@@ -155,35 +161,6 @@ public class IgnoreCommand extends TritonCommand {
 		player.sendMessage(chatManager.formatMessage("&8&m---------------------------"));
 	}
 
-	private TritonProfile loadUser(String name) {
-		LuckPerms luckPerms = TritonCoreCommon.INSTANCE.getPlayerDataManager().getLuckPerms();
-
-		NetworkData playerData = PlayerDataManager.getTemporaryPlayerData(name, PlayerDataType.NETWORK);
-		if(playerData == null) return null;
-
-		return getProfile(playerData);
-	}
-
-	private TritonProfile loadUser(UUID uuid) {
-		NetworkData playerData = PlayerDataManager.getTemporaryPlayerData(uuid, PlayerDataType.NETWORK);
-		if(playerData == null) return null;
-
-		return getProfile(playerData);
-	}
-
-	private TritonProfile getProfile(NetworkData data) {
-		return new TritonProfile() {
-			@Override
-			public UUID getUuid() {
-				return UUID.fromString(data.getUuid());
-			}
-
-			@Override
-			public String getName() {
-				return data.getName();
-			}
-		};
-	}
 
 	enum IgnoreAction {
 		ADD,

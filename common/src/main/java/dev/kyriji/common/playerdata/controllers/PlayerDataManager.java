@@ -12,7 +12,7 @@ import dev.kyriji.common.database.records.DatabaseConnection;
 import dev.kyriji.common.playerdata.documents.NetworkData;
 import dev.kyriji.common.playerdata.enums.PlayerDataType;
 import dev.kyriji.common.playerdata.hooks.TritonPlayerDataHook;
-import dev.kyriji.common.playerdata.model.PlayerDataDocument;
+import dev.kyriji.common.playerdata.models.PlayerDataDocument;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 
@@ -86,6 +86,7 @@ public class PlayerDataManager {
 		});
 
 		hook.registerQuitCallback(player -> {
+			if(!loadedPlayerData.containsKey(player.getUuid())) return;
 			loadedPlayerData.get(player.getUuid()).forEach(PlayerDataDocument::save);
 			unloadPlayerData(player.getUuid());
 		});

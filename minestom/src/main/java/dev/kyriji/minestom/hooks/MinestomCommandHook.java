@@ -1,6 +1,9 @@
 package dev.kyriji.minestom.hooks;
 
+import dev.kyriji.common.TritonCoreCommon;
+import dev.kyriji.common.chat.controllers.ChatManager;
 import dev.kyriji.common.commands.enums.CommandType;
+import dev.kyriji.common.commands.enums.ExecutorType;
 import dev.kyriji.common.commands.hooks.TritonCommandHook;
 import dev.kyriji.common.commands.models.TritonCommand;
 import dev.kyriji.minestom.implementation.MinestomCommandSender;
@@ -14,7 +17,7 @@ import java.util.Arrays;
 public class MinestomCommandHook implements TritonCommandHook {
 	@Override
 	public void registerCommand(TritonCommand command) {
-		if(command.getType() != CommandType.SERVER) return;
+		if(command.getCommandType() != CommandType.SERVER && command.getCommandType() != CommandType.UNIVERSAL) return;
 
 		Command commandInstance = new Command(command.getIdentifier()) {{
 			setDefaultExecutor((sender, context) -> {
@@ -22,6 +25,20 @@ public class MinestomCommandHook implements TritonCommandHook {
 
 				if(sender instanceof Player) minestomSender = new MinestomPlayer((Player) sender);
 				else minestomSender = new MinestomCommandSender(sender);
+
+				if(command.getExecutorType() != ExecutorType.ALL) {
+					ChatManager chatManager = TritonCoreCommon.INSTANCE.getChatManager();
+
+					if(command.getExecutorType() == ExecutorType.PLAYER && !(sender instanceof Player)) {
+						minestomSender.sendMessage(chatManager.formatMessage("&cThis command can only be executed by a player"));
+						return;
+					}
+
+					if(command.getExecutorType() == ExecutorType.CONSOLE && sender instanceof Player) {
+						minestomSender.sendMessage(chatManager.formatMessage("&cThis command can only be executed by console"));
+						return;
+					}
+				}
 
 				String[] args = context.getInput().split(" ");
 				command.execute(minestomSender, Arrays.copyOfRange(args, 1, args.length));

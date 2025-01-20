@@ -1,7 +1,7 @@
 package dev.kyriji.common.playerdata.documents;
 
-import dev.kyriji.common.playerdata.model.PlayerDataDocument;
-import dev.kyriji.common.playerdata.model.StaffData;
+import dev.kyriji.common.playerdata.models.PlayerDataDocument;
+import dev.kyriji.common.playerdata.models.StaffData;
 
 import java.util.ArrayList;
 import java.util.List;

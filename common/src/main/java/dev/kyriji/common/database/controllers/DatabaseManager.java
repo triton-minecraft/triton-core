@@ -7,6 +7,8 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
 import dev.kyriji.common.database.enums.DatabaseType;
 import dev.kyriji.common.database.records.DatabaseConnection;
+import dev.kyriji.common.punishments.models.PunishmentAction;
+import dev.kyriji.common.punishments.models.TimedPunishmentAction;
 import org.bson.UuidRepresentation;
 import org.bson.codecs.configuration.CodecProvider;
 import org.bson.codecs.configuration.CodecRegistry;
@@ -25,8 +27,12 @@ public class DatabaseManager {
 	public static void addDatabase(DatabaseType type, String connectionString, String defaultDatabase) {
 		if(connectionString == null || defaultDatabase == null) throw new NullPointerException("Connection string or default database cannot be null");
 
-		CodecProvider pojoCodecProvider = PojoCodecProvider.builder().automatic(true).build();
-		CodecRegistry pojoCodecRegistry = fromRegistries(getDefaultCodecRegistry(), fromProviders(pojoCodecProvider));
+		CodecRegistry pojoCodecRegistry = fromRegistries(
+				getDefaultCodecRegistry(),
+				fromProviders(PojoCodecProvider.builder()
+						.register(PunishmentAction.class, TimedPunishmentAction.class)
+						.automatic(true)
+						.build()));
 
 		MongoClientSettings settings = MongoClientSettings.builder()
 				.codecRegistry(pojoCodecRegistry)

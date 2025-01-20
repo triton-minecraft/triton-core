@@ -4,7 +4,9 @@ import com.velocitypowered.api.command.CommandMeta;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
 import dev.kyriji.common.TritonCoreCommon;
+import dev.kyriji.common.chat.controllers.ChatManager;
 import dev.kyriji.common.commands.enums.CommandType;
+import dev.kyriji.common.commands.enums.ExecutorType;
 import dev.kyriji.common.commands.hooks.TritonCommandHook;
 import dev.kyriji.common.commands.models.TritonCommand;
 import dev.kyriji.velocity.TritonCoreVelocity;
@@ -14,7 +16,7 @@ import dev.kyriji.velocity.implementation.VelocityPlayer;
 public class VelocityCommandHook implements TritonCommandHook {
 	@Override
 	public void registerCommand(TritonCommand command) {
-		if(command.getType() != CommandType.SERVER) return;
+		if(command.getCommandType() != CommandType.PROXY && command.getCommandType() != CommandType.UNIVERSAL) return;
 
 		CommandMeta commandMeta = TritonCoreVelocity.INSTANCE.getCommandManager().metaBuilder(command.getIdentifier())
 				.build();
@@ -24,6 +26,20 @@ public class VelocityCommandHook implements TritonCommandHook {
 
 			if(invocation.source() instanceof Player) velocitySender = new VelocityPlayer((Player) invocation.source());
 			else velocitySender = new VelocityCommandSender(invocation.source());
+
+			if(command.getExecutorType() != ExecutorType.ALL) {
+				ChatManager chatManager = TritonCoreCommon.INSTANCE.getChatManager();
+
+				if(command.getExecutorType() == ExecutorType.PLAYER && !(invocation.source() instanceof Player)) {
+					velocitySender.sendMessage(chatManager.formatMessage("&cThis command can only be executed by a player"));
+					return;
+				}
+
+				if(command.getExecutorType() == ExecutorType.CONSOLE && invocation.source() instanceof Player) {
+					velocitySender.sendMessage(chatManager.formatMessage("&cThis command can only be executed by console"));
+					return;
+				}
+			}
 
 			command.execute(velocitySender, invocation.arguments());
 		});

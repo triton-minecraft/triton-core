@@ -1,6 +1,7 @@
 package dev.kyriji.common.commands.commands;
 
 import dev.kyriji.common.commands.enums.CommandType;
+import dev.kyriji.common.commands.enums.ExecutorType;
 import dev.kyriji.common.commands.models.TritonCommand;
 import dev.kyriji.common.inventory.enums.TritonMaterial;
 import dev.kyriji.common.inventory.models.TritonInventory;
@@ -27,8 +28,13 @@ public class InventoryTestCommand extends TritonCommand {
 	}
 
 	@Override
-	public CommandType getType() {
+	public CommandType getCommandType() {
 		return CommandType.SERVER;
+	}
+
+	@Override
+	public ExecutorType getExecutorType() {
+		return ExecutorType.PLAYER;
 	}
 
 	@Override
@@ -38,7 +44,7 @@ public class InventoryTestCommand extends TritonCommand {
 
 	@Override
 	public void execute(TritonCommandSender sender, String[] args) {
-		if(!(sender instanceof TritonPlayer player)) return;
+		TritonPlayer player = (TritonPlayer) sender;
 
 		TritonInventory inventory = new TritonInventory(3, "Test Inventory", false) {
 			@Override

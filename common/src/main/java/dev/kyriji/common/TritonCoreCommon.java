@@ -13,6 +13,8 @@ import dev.kyriji.common.inventory.controllers.InventoryManager;
 import dev.kyriji.common.inventory.models.hooks.TritonInventoryHook;
 import dev.kyriji.common.playerdata.controllers.PlayerDataManager;
 import dev.kyriji.common.playerdata.hooks.TritonPlayerDataHook;
+import dev.kyriji.common.punishments.controllers.PunishmentManager;
+import dev.kyriji.common.punishments.hooks.TritonPunishmentHook;
 import dev.wiji.bigminecraftapi.BigMinecraftAPI;
 import dev.wiji.bigminecraftapi.objects.ApiSettings;
 
@@ -24,6 +26,7 @@ public class TritonCoreCommon {
 	private final PlayerDataManager playerDataManager;
 	private final InventoryManager inventoryManager;
 	private final ChatManager chatManager;
+	private final PunishmentManager punishmentManager;
 
 	private TritonCoreCommon(Builder builder) {
 		INSTANCE = this;
@@ -46,8 +49,10 @@ public class TritonCoreCommon {
 		this.playerDataManager = builder.playerDataManager;
 		this.inventoryManager = builder.inventoryManager;
 		this.chatManager = builder.chatManager;
+		this.punishmentManager = builder.punishmentManager;
 
-		if (chatManager != null) chatManager.init();
+		if(chatManager != null) chatManager.init();
+		if(punishmentManager != null) punishmentManager.init();
 	}
 
 	public static Builder builder() {
@@ -74,12 +79,17 @@ public class TritonCoreCommon {
 		return chatManager;
 	}
 
+	public PunishmentManager getPunishmentManager() {
+		return punishmentManager;
+	}
+
 	public static class Builder {
 		private ConfigManager configManager;
 		private CommandManager commandManager;
 		private PlayerDataManager playerDataManager;
 		private InventoryManager inventoryManager;
 		private ChatManager chatManager;
+		private PunishmentManager punishmentManager;
 
 		private Builder() {
 		}
@@ -106,6 +116,11 @@ public class TritonCoreCommon {
 
 		public Builder withChat(TritonChatHook chatHook) {
 			this.chatManager = new ChatManager(chatHook);
+			return this;
+		}
+
+		public Builder withPunishments(TritonPunishmentHook punishmentHook) {
+			this.punishmentManager = new PunishmentManager(punishmentHook);
 			return this;
 		}
 

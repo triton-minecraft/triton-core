@@ -1,12 +1,12 @@
-package dev.kyriji.common.commands.commands;
+package dev.kyriji.common.commands.commands.chat;
 
 import dev.kyriji.common.TritonCoreCommon;
 import dev.kyriji.common.chat.controllers.ChatManager;
 import dev.kyriji.common.commands.enums.CommandType;
+import dev.kyriji.common.commands.enums.ExecutorType;
 import dev.kyriji.common.commands.models.TritonCommand;
 import dev.kyriji.common.models.TritonCommandSender;
 import dev.kyriji.common.models.TritonPlayer;
-import dev.kyriji.common.models.TritonProfile;
 import dev.kyriji.common.playerdata.controllers.PlayerDataManager;
 import dev.kyriji.common.playerdata.documents.NetworkData;
 import dev.kyriji.common.playerdata.enums.Permission;
@@ -26,8 +26,13 @@ public class SocialSpyCommand extends TritonCommand {
 	}
 
 	@Override
-	public CommandType getType() {
+	public CommandType getCommandType() {
 		return CommandType.SERVER;
+	}
+
+	@Override
+	public ExecutorType getExecutorType() {
+		return ExecutorType.PLAYER;
 	}
 
 	@Override
@@ -38,11 +43,7 @@ public class SocialSpyCommand extends TritonCommand {
 	@Override
 	public void execute(TritonCommandSender player, String[] args) {
 		ChatManager chatManager = TritonCoreCommon.INSTANCE.getChatManager();
-
-		if(!(player instanceof TritonPlayer tritonPlayer)) {
-			player.sendMessage(chatManager.formatMessage("&cYou must be a player to use this command"));
-			return;
-		}
+		TritonPlayer tritonPlayer = (TritonPlayer) player;
 
 		if(!tritonPlayer.hasPermission(Permission.STAFF.getIdentifier())) {
 			player.sendMessage(chatManager.formatMessage("&cYou do not have permission to use this command"));

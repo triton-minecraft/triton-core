@@ -1,6 +1,7 @@
 package dev.kyriji.common.commands.commands;
 
 import dev.kyriji.common.commands.enums.CommandType;
+import dev.kyriji.common.commands.enums.ExecutorType;
 import dev.kyriji.common.commands.models.TritonCommand;
 import dev.kyriji.common.models.TritonCommandSender;
 import dev.kyriji.common.models.TritonPlayer;
@@ -23,8 +24,13 @@ public class PlayerDataTestCommand extends TritonCommand {
 	}
 
 	@Override
-	public CommandType getType() {
+	public CommandType getCommandType() {
 		return CommandType.SERVER;
+	}
+
+	@Override
+	public ExecutorType getExecutorType() {
+		return ExecutorType.PLAYER;
 	}
 
 	@Override
@@ -34,7 +40,8 @@ public class PlayerDataTestCommand extends TritonCommand {
 
 	@Override
 	public void execute(TritonCommandSender sender, String[] args) {
-		if(!(sender instanceof TritonPlayer player)) return;
+		TritonPlayer player = (TritonPlayer) sender;
+
 		NetworkData document = PlayerDataManager.getPlayerData(player.getUuid(), PlayerDataType.NETWORK);
 		if(document == null) {
 			player.sendMessage("Failed to load player data");

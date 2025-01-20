@@ -29,4 +29,9 @@ public class VelocityPlayer extends VelocityCommandSender implements TritonPlaye
 	public boolean hasPermission(String permission) {
 		return player.hasPermission(permission);
 	}
+
+	@Override
+	public void disconnect(String reason) {
+		player.disconnect(Component.text(reason));
+	}
 }

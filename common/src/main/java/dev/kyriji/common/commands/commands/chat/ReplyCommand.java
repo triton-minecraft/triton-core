@@ -1,8 +1,9 @@
-package dev.kyriji.common.commands.commands;
+package dev.kyriji.common.commands.commands.chat;
 
 import dev.kyriji.common.TritonCoreCommon;
 import dev.kyriji.common.chat.controllers.ChatManager;
 import dev.kyriji.common.commands.enums.CommandType;
+import dev.kyriji.common.commands.enums.ExecutorType;
 import dev.kyriji.common.commands.models.TritonCommand;
 import dev.kyriji.common.models.TritonCommandSender;
 import dev.kyriji.common.models.TritonProfile;
@@ -25,8 +26,13 @@ public class ReplyCommand extends TritonCommand {
 	}
 
 	@Override
-	public CommandType getType() {
+	public CommandType getCommandType() {
 		return CommandType.SERVER;
+	}
+
+	@Override
+	public ExecutorType getExecutorType() {
+		return ExecutorType.PLAYER;
 	}
 
 	@Override

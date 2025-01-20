@@ -1,6 +1,9 @@
 package dev.kyriji.spigot.hooks;
 
+import dev.kyriji.common.TritonCoreCommon;
+import dev.kyriji.common.chat.controllers.ChatManager;
 import dev.kyriji.common.commands.enums.CommandType;
+import dev.kyriji.common.commands.enums.ExecutorType;
 import dev.kyriji.common.commands.hooks.TritonCommandHook;
 import dev.kyriji.common.commands.models.TritonCommand;
 import dev.kyriji.spigot.TritonCoreSpigot;
@@ -12,7 +15,7 @@ import org.bukkit.entity.Player;
 public class SpigotCommandHook implements TritonCommandHook {
 	@Override
 	public void registerCommand(TritonCommand command) {
-		if(command.getType() != CommandType.SERVER) return;
+		if(command.getCommandType() != CommandType.SERVER && command.getCommandType() != CommandType.UNIVERSAL) return;
 
 		PluginCommand spigotCommand = TritonCoreSpigot.INSTANCE.getCommand(command.getIdentifier());
 		if(spigotCommand == null) throw new NullPointerException("Command " + command.getIdentifier() + " failed to register");
@@ -23,6 +26,19 @@ public class SpigotCommandHook implements TritonCommandHook {
 			if(sender instanceof Player player) commandSender = new SpigotPlayer(player);
 			else commandSender = new SpigotCommandSender(sender);
 
+			if(command.getExecutorType() != ExecutorType.ALL) {
+				ChatManager chatManager = TritonCoreCommon.INSTANCE.getChatManager();
+
+				if(command.getExecutorType() == ExecutorType.PLAYER && !(sender instanceof Player)) {
+					commandSender.sendMessage(chatManager.formatMessage("&cThis command can only be executed by a player"));
+					return false;
+				}
+
+				if(command.getExecutorType() == ExecutorType.CONSOLE && sender instanceof Player) {
+					commandSender.sendMessage(chatManager.formatMessage("&cThis command can only be executed by console"));
+					return false;
+				}
+			}
 			command.execute(commandSender, args);
 			return false;
 		});

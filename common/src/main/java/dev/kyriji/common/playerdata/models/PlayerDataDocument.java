@@ -1,9 +1,7 @@
-package dev.kyriji.common.playerdata.model;
+package dev.kyriji.common.playerdata.models;
 
 import dev.kyriji.common.playerdata.controllers.PlayerDataManager;
 import dev.kyriji.common.playerdata.enums.PlayerDataType;
-import org.bson.codecs.pojo.annotations.BsonDiscriminator;
-import org.bson.codecs.pojo.annotations.BsonProperty;
 
 import java.util.Objects;
 

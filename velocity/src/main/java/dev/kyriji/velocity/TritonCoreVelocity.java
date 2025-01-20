@@ -11,6 +11,7 @@ import dev.kyriji.velocity.controllers.ConfigManager;
 import dev.kyriji.velocity.hooks.VelocityCommandHook;
 import dev.kyriji.velocity.hooks.VelocityConfigHook;
 import dev.kyriji.velocity.hooks.VelocityPlayerDataHook;
+import dev.kyriji.velocity.hooks.VelocityPunishmentHook;
 
 import java.util.logging.Logger;
 
@@ -34,8 +35,6 @@ public class TritonCoreVelocity {
 	public TritonCoreVelocity(ProxyServer server, Logger logger) {
 		INSTANCE = server;
 		this.logger = logger;
-
-
 	}
 
 	@Subscribe
@@ -45,10 +44,14 @@ public class TritonCoreVelocity {
 		VelocityPlayerDataHook playerData = new VelocityPlayerDataHook();
 		INSTANCE.getEventManager().register(this, playerData);
 
+		VelocityPunishmentHook punishmentHook = new VelocityPunishmentHook();
+		INSTANCE.getEventManager().register(this, punishmentHook);
+
 		TritonCoreCommon core = TritonCoreCommon.builder()
 				.withConfig(new VelocityConfigHook())
 				.withCommands(new VelocityCommandHook())
-				 .withPlayerData(playerData)
+				.withPlayerData(playerData)
+				.withPunishments(punishmentHook)
 				.build();
 
 	}

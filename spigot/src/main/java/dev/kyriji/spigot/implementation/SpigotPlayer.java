@@ -28,4 +28,9 @@ public class SpigotPlayer extends SpigotCommandSender implements TritonPlayer {
 	public boolean hasPermission(String permission) {
 		return player.hasPermission(permission);
 	}
+
+	@Override
+	public void disconnect(String reason) {
+		player.kickPlayer(reason);
+	}
 }

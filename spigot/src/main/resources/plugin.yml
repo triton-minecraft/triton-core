@@ -10,3 +10,10 @@ commands:
   r:
   ignore:
   socialspy:
+  ban:
+  ipban:
+  kick:
+  mute:
+  warn:
+  unban:
+  unmute:

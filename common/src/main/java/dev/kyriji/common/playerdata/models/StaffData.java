@@ -1,4 +1,4 @@
-package dev.kyriji.common.playerdata.model;
+package dev.kyriji.common.playerdata.models;
 
 public class StaffData {
 	private boolean socialSpyEnabled = true;
