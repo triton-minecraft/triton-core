@@ -1,6 +1,8 @@
 package dev.kyriji.common.chat.controllers;
 
+import dev.kyriji.common.TritonCoreCommon;
 import dev.kyriji.common.chat.hooks.TritonChatHook;
+import dev.kyriji.common.enums.ServerType;
 import dev.kyriji.common.playerdata.enums.Permission;
 import dev.wiji.bigminecraftapi.BigMinecraftAPI;
 import dev.wiji.bigminecraftapi.controllers.RedisListener;
@@ -28,6 +30,8 @@ public class StaffChatManager {
 	}
 
 	private void registerStaffMessageListener() {
+		if(TritonCoreCommon.SERVER_TYPE == ServerType.VELOCITY) return;
+
 		//TODO: Move channel to enum
 		BigMinecraftAPI.getRedisManager().addListener(new RedisListener(REDIS_CHANNEL) {
 			@Override

@@ -1,6 +1,8 @@
 package dev.kyriji.common.chat.controllers;
 
+import dev.kyriji.common.TritonCoreCommon;
 import dev.kyriji.common.chat.hooks.TritonChatHook;
+import dev.kyriji.common.enums.ServerType;
 import dev.kyriji.common.models.TritonCommandSender;
 import dev.kyriji.common.models.TritonPlayer;
 import dev.kyriji.common.models.TritonProfile;
@@ -30,6 +32,8 @@ public class PrivateMessageManager {
 	}
 
 	private void registerPrivateMessageListener() {
+		if(TritonCoreCommon.SERVER_TYPE == ServerType.VELOCITY) return;
+
 		//TODO: Move channel to enum
 		BigMinecraftAPI.getRedisManager().addListener(new RedisListener(REDIS_CHANNEL) {
 			@Override

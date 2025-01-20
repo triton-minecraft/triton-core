@@ -7,11 +7,9 @@ import com.velocitypowered.api.plugin.Dependency;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.proxy.ProxyServer;
 import dev.kyriji.common.TritonCoreCommon;
+import dev.kyriji.common.enums.ServerType;
 import dev.kyriji.velocity.controllers.ConfigManager;
-import dev.kyriji.velocity.hooks.VelocityCommandHook;
-import dev.kyriji.velocity.hooks.VelocityConfigHook;
-import dev.kyriji.velocity.hooks.VelocityPlayerDataHook;
-import dev.kyriji.velocity.hooks.VelocityPunishmentHook;
+import dev.kyriji.velocity.hooks.*;
 
 import java.util.logging.Logger;
 
@@ -47,11 +45,12 @@ public class TritonCoreVelocity {
 		VelocityPunishmentHook punishmentHook = new VelocityPunishmentHook();
 		INSTANCE.getEventManager().register(this, punishmentHook);
 
-		TritonCoreCommon core = TritonCoreCommon.builder()
+		TritonCoreCommon core = TritonCoreCommon.builder(ServerType.VELOCITY)
 				.withConfig(new VelocityConfigHook())
 				.withCommands(new VelocityCommandHook())
 				.withPlayerData(playerData)
 				.withPunishments(punishmentHook)
+				.withChat(new VelocityChatHook())
 				.build();
 
 	}

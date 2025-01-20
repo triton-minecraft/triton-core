@@ -8,6 +8,7 @@ import dev.kyriji.common.commands.commands.chat.MsgCommand;
 import dev.kyriji.common.commands.commands.chat.ReplyCommand;
 import dev.kyriji.common.commands.commands.chat.SocialSpyCommand;
 import dev.kyriji.common.commands.controllers.CommandManager;
+import dev.kyriji.common.enums.ServerType;
 import dev.kyriji.common.models.TritonPlayer;
 import dev.kyriji.common.models.TritonProfile;
 import dev.kyriji.common.playerdata.controllers.PlayerDataManager;

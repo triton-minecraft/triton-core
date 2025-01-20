@@ -3,6 +3,7 @@ package dev.kyriji.minestom;
 import dev.kyriji.common.TritonCoreCommon;
 import dev.kyriji.common.config.documents.CoreConfig;
 import dev.kyriji.common.config.enums.ConfigType;
+import dev.kyriji.common.enums.ServerType;
 import dev.kyriji.minestom.controllers.ConfigManager;
 import dev.kyriji.minestom.hooks.*;
 import dev.kyriji.minestom.models.LuckpermsAdapter;
@@ -23,7 +24,7 @@ public class TritonCoreMinestom {
 	public static void init() {
 		ConfigManager.init();
 
-		core = TritonCoreCommon.builder()
+		core = TritonCoreCommon.builder(ServerType.MINESTOM)
 				.withConfig(new MinestomConfigHook())
 				.withCommands(new MinestomCommandHook())
 				.withInventory(new MinestomInventoryHook())

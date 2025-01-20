@@ -5,6 +5,7 @@ import dev.kyriji.common.TritonCoreCommon;
 import dev.kyriji.common.chat.controllers.ChatManager;
 import dev.kyriji.common.commands.commands.punishments.*;
 import dev.kyriji.common.commands.controllers.CommandManager;
+import dev.kyriji.common.enums.ServerType;
 import dev.kyriji.common.models.TritonPlayer;
 import dev.kyriji.common.models.TritonProfile;
 import dev.kyriji.common.playerdata.controllers.PlayerDataManager;
@@ -59,6 +60,8 @@ public class PunishmentManager {
 	}
 
 	private void registerPunishmentListener() {
+		if(TritonCoreCommon.SERVER_TYPE != ServerType.VELOCITY) return;
+
 		BigMinecraftAPI.getRedisManager().addListener(new RedisListener(PUNISHMENT_CHANNEL) {
 			@Override
 			public void onMessage(String s) {

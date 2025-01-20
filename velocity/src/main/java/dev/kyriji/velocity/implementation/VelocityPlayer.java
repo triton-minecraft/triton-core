@@ -1,6 +1,8 @@
 package dev.kyriji.velocity.implementation;
 
 import com.velocitypowered.api.proxy.Player;
+import dev.kyriji.common.TritonCoreCommon;
+import dev.kyriji.common.chat.controllers.ChatManager;
 import dev.kyriji.common.models.TritonPlayer;
 import net.kyori.adventure.text.Component;
 
@@ -32,6 +34,7 @@ public class VelocityPlayer extends VelocityCommandSender implements TritonPlaye
 
 	@Override
 	public void disconnect(String reason) {
-		player.disconnect(Component.text(reason));
+		ChatManager manager = TritonCoreCommon.INSTANCE.getChatManager();
+		player.disconnect(Component.text(manager.formatMessage(reason)));
 	}
 }

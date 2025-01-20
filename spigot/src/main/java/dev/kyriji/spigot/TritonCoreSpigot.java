@@ -1,6 +1,7 @@
 package dev.kyriji.spigot;
 
 import dev.kyriji.common.TritonCoreCommon;
+import dev.kyriji.common.enums.ServerType;
 import dev.kyriji.spigot.controllers.ConfigManager;
 import dev.kyriji.spigot.hooks.*;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -14,7 +15,7 @@ public class TritonCoreSpigot extends JavaPlugin {
 
 		ConfigManager.init(this);
 
-		TritonCoreCommon common = TritonCoreCommon.builder()
+		TritonCoreCommon common = TritonCoreCommon.builder(ServerType.SPIGOT)
 				.withCommands(new SpigotCommandHook())
 				.withConfig(new SpigotConfigHook())
 				.withInventory(new SpigotInventoryHook())

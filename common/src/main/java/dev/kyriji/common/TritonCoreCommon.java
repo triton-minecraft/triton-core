@@ -9,6 +9,7 @@ import dev.kyriji.common.config.documents.CoreConfig;
 import dev.kyriji.common.config.enums.ConfigType;
 import dev.kyriji.common.config.hooks.TritonConfigHook;
 import dev.kyriji.common.config.models.RedisConnection;
+import dev.kyriji.common.enums.ServerType;
 import dev.kyriji.common.inventory.controllers.InventoryManager;
 import dev.kyriji.common.inventory.models.hooks.TritonInventoryHook;
 import dev.kyriji.common.playerdata.controllers.PlayerDataManager;
@@ -20,6 +21,7 @@ import dev.wiji.bigminecraftapi.objects.ApiSettings;
 
 public class TritonCoreCommon {
 	public static TritonCoreCommon INSTANCE;
+	public static ServerType SERVER_TYPE;
 
 	private final ConfigManager configManager;
 	private final CommandManager commandManager;
@@ -55,7 +57,8 @@ public class TritonCoreCommon {
 		if(punishmentManager != null) punishmentManager.init();
 	}
 
-	public static Builder builder() {
+	public static Builder builder(ServerType serverType) {
+		TritonCoreCommon.SERVER_TYPE = serverType;
 		return new Builder();
 	}
 

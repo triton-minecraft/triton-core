@@ -53,7 +53,7 @@ public class PunishmentUtils {
 
 	private static void sendUsageMessage(TritonCommandSender player, PunishmentType punishmentType) {
 		ChatManager chatManager = TritonCoreCommon.INSTANCE.getChatManager();
-		StringBuilder usage = new StringBuilder("&cUsage: /" + punishmentType.name().toLowerCase() + " <player>");
+		StringBuilder usage = new StringBuilder("&cUsage: /" + punishmentType.getName().toLowerCase().replace(" ", "") + " <player>");
 
 		switch (punishmentType) {
 			case BAN:
@@ -87,7 +87,7 @@ public class PunishmentUtils {
 
 	private static PunishmentDetails parsePunishmentDetails(String[] args, PunishmentType punishmentType) {
 		long duration = -1;
-		String defaultReason = "You have been " + punishmentType.name().toLowerCase() + punishmentType.getSuffix();
+		String defaultReason = "You have been " + punishmentType.getName() + punishmentType.getSuffix();
 
 		if(punishmentType == PunishmentType.UNBAN || punishmentType == PunishmentType.UNMUTE) {
 			return new PunishmentDetails(-1, "");
