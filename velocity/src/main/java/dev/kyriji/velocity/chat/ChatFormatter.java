@@ -8,7 +8,7 @@ public class ChatFormatter {
 		for (int i = 0; i < split.length; i++) {
 			String translated = split[i].replace('&', '§');
 			builder.append(translated);
-			if (i != split.length - 1) {
+			if(i != split.length - 1) {
 				builder.append("&");
 			}
 		}

@@ -33,17 +33,17 @@ public abstract class InventoryPanel {
 
 		preClickListener = EventListener.builder(InventoryPreClickEvent.class)
 				.handler(event -> {
-					if (Objects.requireNonNull(event.getInventory()).getWindowId() != this.inventoryId) return;
+					if(Objects.requireNonNull(event.getInventory()).getWindowId() != this.inventoryId) return;
 					event.setCancelled(true);
 					onClick(event);
 				}).build();
 
 		closeListener = EventListener.builder(InventoryCloseEvent.class)
 				.handler(event -> {
-					if (event.getInventory().getWindowId() != this.inventoryId) return;
+					if(event.getInventory().getWindowId() != this.inventoryId) return;
 
-					if (!closable && player.isOnline()) {
-						if (!reopening) {
+					if(!closable && player.isOnline()) {
+						if(!reopening) {
 							reopening = true;
 							MinecraftServer.getSchedulerManager().scheduleNextTick(() -> {
 								this.inventoryId = inventory.getWindowId();

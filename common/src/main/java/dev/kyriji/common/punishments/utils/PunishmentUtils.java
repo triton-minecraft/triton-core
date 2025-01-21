@@ -9,11 +9,13 @@ import dev.kyriji.common.playerdata.documents.PunishmentData;
 import dev.kyriji.common.playerdata.enums.Permission;
 import dev.kyriji.common.playerdata.enums.PlayerDataType;
 import dev.kyriji.common.playerdata.utils.PlayerDataUtils;
+import dev.kyriji.common.punishments.models.PaginatedPunishments;
 import dev.kyriji.common.punishments.models.TimedPunishmentAction;
 import dev.kyriji.common.punishments.models.PunishmentAction;
 import dev.kyriji.common.punishments.enums.PunishmentType;
 import dev.kyriji.common.models.TritonProfile;
 import dev.kyriji.common.models.TritonCommandSender;
+import dev.kyriji.common.utils.TimeUtils;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -43,12 +45,12 @@ public class PunishmentUtils {
 			return;
 		}
 
-		if (punishmentType == PunishmentType.UNBAN || punishmentType == PunishmentType.UNMUTE) {
+		if(punishmentType == PunishmentType.UNBAN || punishmentType == PunishmentType.UNMUTE) {
 			PunishmentType checkType = punishmentType == PunishmentType.UNBAN ? PunishmentType.BAN : PunishmentType.MUTE;
 
 			PunishmentAction activePunishment = getActivePunishment(target, checkType, punishmentType);
 
-			if (activePunishment == null) {
+			if(activePunishment == null) {
 				String punishmentName = checkType.getName().toLowerCase();
 				player.sendMessage(chatManager.formatMessage("&cThis player is not currently " + punishmentName + checkType.getSuffix()));
 				return;
@@ -60,6 +62,7 @@ public class PunishmentUtils {
 		PunishmentAction punishment = createPunishment(player, target, punishmentType, details);
 		savePunishment(target, punishment);
 
+		player.sendMessage(chatManager.formatMessage("&aPunishment action applied to &e" + target.getName()));
 		broadcastPunishment(player, target, punishment, details.duration);
 	}
 
@@ -84,7 +87,7 @@ public class PunishmentUtils {
 		player.sendMessage(chatManager.formatMessage(usage.toString()));
 	}
 
-	private static TritonProfile findTargetPlayer(String targetString) {
+	public static TritonProfile findTargetPlayer(String targetString) {
 		TritonProfile target = PlayerDataUtils.loadUser(targetString);
 		if(target == null) {
 			try {
@@ -113,7 +116,7 @@ public class PunishmentUtils {
 
 		if(punishmentType == PunishmentType.BAN || punishmentType == PunishmentType.MUTE) {
 			try {
-				duration = ChatUtils.parseDuration(args[1]);
+				duration = TimeUtils.parseDuration(args[1]);
 				if(args.length > 2) {
 					reason = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
 				}
@@ -148,7 +151,7 @@ public class PunishmentUtils {
 	}
 
 	private static void savePunishment(TritonProfile target, PunishmentAction punishment) {
-		PunishmentData data = PlayerDataManager.getPlayerData(target.getUuid(), PlayerDataType.PUNISHMENT);
+		PunishmentData data = PlayerDataManager.getTemporaryPlayerData(target.getUuid(), PlayerDataType.PUNISHMENT);
 		if(data == null) {
 			throw new NullPointerException("Punishment data not found for " + target.getName());
 		}
@@ -170,7 +173,7 @@ public class PunishmentUtils {
 											 PunishmentAction punishment, long duration) {
 		StringBuilder message = new StringBuilder()
 				.append("&e").append(player.getName())
-				.append(" &7has ").append(punishment.getPunishmentType().getName())
+				.append(" &7has ").append(punishment.getPunishmentType().getName().toLowerCase())
 				.append(punishment.getPunishmentType().getSuffix())
 				.append(" &c").append(target.getName());
 
@@ -182,7 +185,7 @@ public class PunishmentUtils {
 		if(punishment.getPunishmentType() == PunishmentType.BAN ||
 				punishment.getPunishmentType() == PunishmentType.MUTE) {
 			message.append(" &8(&7")
-					.append(duration == -1 ? "Permanent" : ChatUtils.formatDuration(duration))
+					.append(duration == -1 ? "Permanent" : TimeUtils.formatDuration(duration))
 					.append("&8)");
 		}
 
@@ -190,45 +193,58 @@ public class PunishmentUtils {
 	}
 
 	public static String getBanMessage(TimedPunishmentAction punishmentAction) {
-		return String.format("&cYou have been banned from the server for: \n%s by %s\n%s",
-				punishmentAction.getDuration() == -1 ? "Permanent" : ChatUtils.formatDuration(punishmentAction.getDuration()),
-				punishmentAction.getIssuer(),
-				punishmentAction.getReason());
+		return String.format(ChatManager.SERVER_LOGO + "\n\n" +
+				"&cYou have been banned from the network\n" +
+				"&7Reason: &f%s\n" +
+				"&7Duration: &f%s\n\n" +
+				"&bAppeal at &fhttps://tritonmc.com/appeal",
+				punishmentAction.getReason(),
+				punishmentAction.getDuration() == -1 ? "Permanent" : TimeUtils.formatDuration(punishmentAction.getDuration()));
 	}
 
 	public static String getMuteMessage(TimedPunishmentAction punishmentAction) {
-		return String.format("&cYou have been muted for: \n%s by %s\n%s",
-				punishmentAction.getDuration() == -1 ? "Permanent" : ChatUtils.formatDuration(punishmentAction.getDuration()),
-				punishmentAction.getIssuer(),
-				punishmentAction.getReason());
+		return String.format("""
+						&8&m                                                  &f\s
+						&cYou have been muted.
+						&7Reason: &f%s
+						&7Duration: &f%s
+						&fAppeal at &fhttps://tritonmc.com/appeal
+						&8&m                                                  &f\s""",
+				punishmentAction.getReason(),
+				punishmentAction.getDuration() == -1 ? "Permanent" : TimeUtils.formatDuration(punishmentAction.getDuration()));
 	}
 
 	public static String getKickMessage(PunishmentAction punishmentAction) {
-		return String.format("&cYou have been kicked from the server by %s\n%s",
-				punishmentAction.getIssuer(),
+		return String.format(ChatManager.SERVER_LOGO + "\n\n" +
+						"&cYou have been kicked from the network" +
+						"&7Reason: &f%s\n\n" +
+						"&bFurther violations may in a ban",
 				punishmentAction.getReason());
 	}
 
 	public static String getWarnMessage(PunishmentAction punishmentAction) {
-		return String.format("&cYou have been warned by %s\n%s",
-				punishmentAction.getIssuer(),
+		return String.format("""
+						&8&m                                                  &f\s
+						&cYou have been warned.
+						&7Reason: &f%s
+						&fFurther violations may result in a mute or ban.
+						&8&m                                                  &f\s""",
 				punishmentAction.getReason());
 	}
 
 	public static String getUnmuteMessage(PunishmentAction punishmentAction) {
-		return String.format("&aYou have been unmuted by %s",
-				punishmentAction.getIssuer());
+		return "&aYou have been unmuted";
 	}
 
 	public static PunishmentAction getActivePunishment(TritonProfile player, PunishmentType type, PunishmentType overrideType) {
 		PunishmentData data = PlayerDataManager.getTemporaryPlayerData(player.getUuid(), PlayerDataType.PUNISHMENT);
-		if (data == null) return null;
+		if(data == null) return null;
 
 		List<PunishmentAction> punishments = data.getPunishments().stream()
 				.filter(punishment -> punishment.getPunishmentType() == type)
 				.toList();
 
-		if (punishments.isEmpty()) return null;
+		if(punishments.isEmpty()) return null;
 
 		PunishmentAction mostRecentOverride = data.getPunishments().stream()
 				.filter(punishment -> punishment.getPunishmentType() == overrideType)
@@ -236,13 +252,13 @@ public class PunishmentUtils {
 				.orElse(null);
 
 		for (PunishmentAction punishment : punishments) {
-			if (mostRecentOverride != null && mostRecentOverride.getTime() > punishment.getTime()) {
+			if(mostRecentOverride != null && mostRecentOverride.getTime() > punishment.getTime()) {
 				continue;
 			}
 
-			if (punishment instanceof TimedPunishmentAction timedPunishment) {
+			if(punishment instanceof TimedPunishmentAction timedPunishment) {
 				long duration = timedPunishment.getDuration();
-				if (duration == -1 || System.currentTimeMillis() < punishment.getTime() + duration * 1000) {
+				if(duration == -1 || System.currentTimeMillis() < punishment.getTime() + duration * 1000) {
 					return punishment;
 				}
 			} else {
@@ -251,6 +267,18 @@ public class PunishmentUtils {
 		}
 
 		return null;
+	}
+
+	public static PaginatedPunishments paginatePunishments(TritonProfile player) {
+		PunishmentData data = PlayerDataManager.getTemporaryPlayerData(player.getUuid(), PlayerDataType.PUNISHMENT);
+		if(data == null) return null;
+
+		List<PunishmentAction> punishments = data.getPunishments();
+		punishments.sort(Comparator.comparingLong(PunishmentAction::getTime).reversed());
+
+		PaginatedPunishments paginatedPunishments = new PaginatedPunishments(player);
+		punishments.forEach(paginatedPunishments::addAction);
+		return paginatedPunishments;
 	}
 
 	public static PunishmentAction getActiveBan(TritonPlayer player) {

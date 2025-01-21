@@ -17,7 +17,7 @@ public class ConfigManager {
 	private static void loadConfig() {
 		File configFile = new File(CONFIG_FILE);
 
-		if (!configFile.exists()) {
+		if(!configFile.exists()) {
 			System.out.println("config file not found: " + CONFIG_FILE);
 			throw new RuntimeException("config file not found: " + CONFIG_FILE);
 		}
@@ -31,11 +31,11 @@ public class ConfigManager {
 	}
 
 	public static String getValue(String key) {
-		if (config == null) {
+		if(config == null) {
 			init();
 		}
 
-		if (config.has(key)) {
+		if(config.has(key)) {
 			return config.get(key).getAsString();
 		}
 		return null;

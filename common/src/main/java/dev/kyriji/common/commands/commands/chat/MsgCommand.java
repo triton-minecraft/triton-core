@@ -6,7 +6,14 @@ import dev.kyriji.common.commands.enums.CommandType;
 import dev.kyriji.common.commands.enums.ExecutorType;
 import dev.kyriji.common.commands.models.TritonCommand;
 import dev.kyriji.common.models.TritonCommandSender;
+import dev.kyriji.common.models.TritonPlayer;
 import dev.kyriji.common.models.TritonProfile;
+import dev.kyriji.common.playerdata.controllers.PlayerDataManager;
+import dev.kyriji.common.playerdata.documents.PunishmentData;
+import dev.kyriji.common.playerdata.enums.PlayerDataType;
+import dev.kyriji.common.punishments.models.PunishmentAction;
+import dev.kyriji.common.punishments.models.TimedPunishmentAction;
+import dev.kyriji.common.punishments.utils.PunishmentUtils;
 import dev.wiji.bigminecraftapi.BigMinecraftAPI;
 
 import java.util.*;
@@ -39,7 +46,7 @@ public class MsgCommand extends TritonCommand {
 
 	@Override
 	public List<String> getTabCompletions(TritonCommandSender sender, String[] args) {
-		if (args.length == 1) {
+		if(args.length == 1) {
 			String partial = args[0].toLowerCase();
 			return BigMinecraftAPI.getNetworkManager().getPlayers().values().stream()
 					.filter(name -> name.toLowerCase().startsWith(partial))
@@ -52,17 +59,17 @@ public class MsgCommand extends TritonCommand {
 	public void execute(TritonCommandSender sender, String[] args) {
 		ChatManager chatManager = TritonCoreCommon.INSTANCE.getChatManager();
 
-		if (!validateArgs(sender, args, chatManager)) {
+		if(!validateArgs(sender, args, chatManager)) {
 			return;
 		}
 
 		Optional<UUID> recipientOptional = findRecipient(args[0]);
-		if (!recipientOptional.isPresent()) {
+		if(!recipientOptional.isPresent()) {
 			sender.sendMessage(chatManager.formatMessage(PLAYER_NOT_FOUND));
 			return;
 		}
 
-		if (recipientOptional.get().equals(sender.getUuid())) {
+		if(recipientOptional.get().equals(sender.getUuid())) {
 			sender.sendMessage(chatManager.formatMessage(SELF_MESSAGE));
 			return;
 		}
@@ -70,12 +77,21 @@ public class MsgCommand extends TritonCommand {
 		UUID recipientId = recipientOptional.get();
 		String message = buildMessage(args);
 
+		if(sender instanceof TritonPlayer) {
+			PunishmentAction punishmentAction = PunishmentUtils.getActiveMute((TritonPlayer) sender);
+
+			if(punishmentAction instanceof TimedPunishmentAction) {
+				sender.sendMessage(chatManager.formatMessage(PunishmentUtils.getMuteMessage((TimedPunishmentAction) punishmentAction)));
+				return;
+			}
+		}
+
 		chatManager.getPrivateMessageManager().sendPrivateMessage(sender, recipientId, message);
 		notifySender(sender, recipientId, message, chatManager);
 	}
 
 	private boolean validateArgs(TritonCommandSender sender, String[] args, ChatManager chatManager) {
-		if (args.length < 2) {
+		if(args.length < 2) {
 			sender.sendMessage(chatManager.formatMessage(COMMAND_USAGE));
 			return false;
 		}

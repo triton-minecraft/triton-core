@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.UUID;
 
 public class ChatManager {
+	public static final String SERVER_LOGO = "&6&lTriton&3&lMC";
+
 	private final TritonChatHook hook;
 	private PrivateMessageManager privateMessageManager;
 	private StaffChatManager staffChatManager;
@@ -59,11 +61,11 @@ public class ChatManager {
 
 	public String formatPlayerName(TritonProfile player) {
 		LuckPerms api = TritonCoreCommon.INSTANCE.getPlayerDataManager().getLuckPerms();
-		if (api == null) throw new NullPointerException("LuckPerms API not found");
+		if(api == null) throw new NullPointerException("LuckPerms API not found");
 
 		User user = api.getUserManager().getUser(player.getUuid());
 
-		if (user == null) {
+		if(user == null) {
 			try {
 				user = api.getUserManager().loadUser(player.getUuid()).join();
 			} catch (Exception e) {
@@ -72,14 +74,14 @@ public class ChatManager {
 			}
 		}
 
-		if (user == null) {
+		if(user == null) {
 			return formatMessage("&7" + player.getName() + "&r");
 		}
 
 		String groupName = user.getPrimaryGroup();
 		Group group = api.getGroupManager().getGroup(groupName);
 
-		if (group == null) {
+		if(group == null) {
 			return formatMessage("&7" + player.getName() + "&r");
 		}
 

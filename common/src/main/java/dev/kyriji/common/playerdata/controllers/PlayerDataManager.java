@@ -62,7 +62,7 @@ public class PlayerDataManager {
 			} catch (IllegalStateException e) {
 				attempts[0]++;
 
-				if (attempts[0] >= MAX_RETRY_ATTEMPTS) {
+				if(attempts[0] >= MAX_RETRY_ATTEMPTS) {
 					logger.severe("Failed to connect to LuckPerms after " + MAX_RETRY_ATTEMPTS + " attempts!");
 					scheduler.shutdown();
 					return;
@@ -161,7 +161,7 @@ public class PlayerDataManager {
 	}
 
 	public LuckPerms getLuckPerms() {
-		if (luckPerms == null) {
+		if(luckPerms == null) {
 			throw new IllegalStateException("LuckPerms is not yet initialized");
 		}
 		return luckPerms;

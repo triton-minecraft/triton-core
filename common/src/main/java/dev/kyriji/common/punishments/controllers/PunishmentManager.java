@@ -49,6 +49,8 @@ public class PunishmentManager {
 		commandManager.registerCommand(new UnbanCommand());
 		commandManager.registerCommand(new WarnCommand());
 
+		commandManager.registerCommand(new LogsCommand());
+
 		registerPunishmentListener();
 		registerJoinCallback();
 		registerChatCallback();
@@ -96,7 +98,7 @@ public class PunishmentManager {
 	}
 
 	private void applyBan(TritonPlayer player, PunishmentAction action) {
-		if (action instanceof TimedPunishmentAction) {
+		if(action instanceof TimedPunishmentAction) {
 			player.disconnect(PunishmentUtils.getBanMessage((TimedPunishmentAction) action));
 		} else throw new IllegalArgumentException("Ban action must be timed");
 	}
@@ -154,7 +156,7 @@ public class PunishmentManager {
 
 			boolean isTimed = jsonObject.has("duration");
 
-			if (isTimed) {
+			if(isTimed) {
 				TimedPunishmentAction timedAction = new TimedPunishmentAction();
 				deserializeCommonFields(timedAction, jsonObject);
 				timedAction.setDuration(jsonObject.get("duration").getAsLong());
@@ -167,13 +169,13 @@ public class PunishmentManager {
 		}
 
 		private void deserializeCommonFields(PunishmentAction action, JsonObject jsonObject) {
-			if (jsonObject.has("punishmentType")) {
+			if(jsonObject.has("punishmentType")) {
 				action.setPunishmentType(PunishmentType.valueOf(jsonObject.get("punishmentType").getAsString()));
 			}
-			if (jsonObject.has("reason")) {
+			if(jsonObject.has("reason")) {
 				action.setReason(jsonObject.get("reason").getAsString());
 			}
-			if (jsonObject.has("issuer")) {
+			if(jsonObject.has("issuer")) {
 				action.setIssuer(String.valueOf(UUID.fromString(jsonObject.get("issuer").getAsString())));
 			}
 		}

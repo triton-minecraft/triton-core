@@ -8,7 +8,7 @@ public class ChatFormatter {
 		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i < split.length; i++) {
 			builder.append(ChatColor.translateAlternateColorCodes('&', split[i]));
-			if (i != split.length - 1) builder.append("&");
+			if(i != split.length - 1) builder.append("&");
 		}
 		return builder.toString();
 	}

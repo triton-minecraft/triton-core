@@ -20,7 +20,7 @@ public class ConfigManager {
 	private static void loadConfig() {
 		File configFile = new File(plugin.getDataFolder(), CONFIG_FILE);
 
-		if (!configFile.exists()) {
+		if(!configFile.exists()) {
 			System.out.println("config file not found: " + configFile.getPath());
 			throw new RuntimeException("config file not found: " + configFile.getPath());
 		}
@@ -34,11 +34,11 @@ public class ConfigManager {
 	}
 
 	public static String getValue(String key) {
-		if (config == null) {
+		if(config == null) {
 			init(plugin);
 		}
 
-		if (config.has(key)) {
+		if(config.has(key)) {
 			return config.get(key).getAsString();
 		}
 		return null;

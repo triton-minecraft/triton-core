@@ -1381,7 +1381,7 @@ public enum TritonMaterial {
 
 	public static TritonMaterial getByName(String name) {
 		for (TritonMaterial tritonMaterial : values()) {
-			if (tritonMaterial.name().equalsIgnoreCase(name)) {
+			if(tritonMaterial.name().equalsIgnoreCase(name)) {
 				return tritonMaterial;
 			}
 		}

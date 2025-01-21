@@ -19,7 +19,7 @@ public class ConfigManager {
 
 	private static void loadConfig() {
 		try (InputStream is = ConfigManager.class.getResourceAsStream(CONFIG_RESOURCE)) {
-			if (is == null) {
+			if(is == null) {
 				throw new IllegalStateException("Config resource not found: " + CONFIG_RESOURCE);
 			}
 
@@ -32,11 +32,11 @@ public class ConfigManager {
 	}
 
 	public static String getValue(String key) {
-		if (config == null) {
+		if(config == null) {
 			init();
 		}
 
-		if (config.has(key)) {
+		if(config.has(key)) {
 			return config.get(key).getAsString();
 		}
 		return null;
