@@ -1,5 +1,6 @@
 package dev.kyriji.spigot.implementation;
 
+import dev.kyriji.common.TritonCoreCommon;
 import dev.kyriji.common.models.TritonCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -20,7 +21,7 @@ public class SpigotCommandSender implements TritonCommandSender {
 
 	@Override
 	public UUID getUuid() {
-		return sender instanceof Player player ? player.getUniqueId() : null;
+		return sender instanceof Player player ? player.getUniqueId() : TritonCoreCommon.CONSOLE_UUID;
 	}
 
 	@Override

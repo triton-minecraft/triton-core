@@ -1,5 +1,6 @@
 package dev.kyriji.minestom.implementation;
 
+import dev.kyriji.common.TritonCoreCommon;
 import dev.kyriji.common.models.TritonCommandSender;
 import net.minestom.server.command.CommandSender;
 
@@ -19,7 +20,7 @@ public class MinestomCommandSender implements TritonCommandSender {
 
 	@Override
 	public UUID getUuid() {
-		return sender.isPlayer() ? sender.asPlayer().getUuid() : null;
+		return sender.isPlayer() ? sender.asPlayer().getUuid() : TritonCoreCommon.CONSOLE_UUID;
 	}
 
 	@Override

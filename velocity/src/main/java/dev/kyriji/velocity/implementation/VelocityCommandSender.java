@@ -2,6 +2,7 @@ package dev.kyriji.velocity.implementation;
 
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.Player;
+import dev.kyriji.common.TritonCoreCommon;
 import dev.kyriji.common.models.TritonCommandSender;
 import net.kyori.adventure.text.Component;
 
@@ -21,7 +22,7 @@ public class VelocityCommandSender implements TritonCommandSender {
 
 	@Override
 	public UUID getUuid() {
-		return sender instanceof Player player ? player.getUniqueId() : null;
+		return sender instanceof Player player ? player.getUniqueId() : TritonCoreCommon.CONSOLE_UUID;
 	}
 
 	@Override

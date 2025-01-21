@@ -43,6 +43,18 @@ public class PunishmentUtils {
 			return;
 		}
 
+		if (punishmentType == PunishmentType.UNBAN || punishmentType == PunishmentType.UNMUTE) {
+			PunishmentType checkType = punishmentType == PunishmentType.UNBAN ? PunishmentType.BAN : PunishmentType.MUTE;
+
+			PunishmentAction activePunishment = getActivePunishment(target, checkType, punishmentType);
+
+			if (activePunishment == null) {
+				String punishmentName = checkType.getName().toLowerCase();
+				player.sendMessage(chatManager.formatMessage("&cThis player is not currently " + punishmentName + checkType.getSuffix()));
+				return;
+			}
+		}
+
 		PunishmentDetails details = parsePunishmentDetails(args, punishmentType);
 
 		PunishmentAction punishment = createPunishment(player, target, punishmentType, details);
@@ -208,7 +220,7 @@ public class PunishmentUtils {
 				punishmentAction.getIssuer());
 	}
 
-	public static PunishmentAction getActivePunishment(TritonPlayer player, PunishmentType type, PunishmentType overrideType) {
+	public static PunishmentAction getActivePunishment(TritonProfile player, PunishmentType type, PunishmentType overrideType) {
 		PunishmentData data = PlayerDataManager.getTemporaryPlayerData(player.getUuid(), PlayerDataType.PUNISHMENT);
 		if (data == null) return null;
 

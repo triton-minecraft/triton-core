@@ -19,9 +19,13 @@ import dev.kyriji.common.punishments.hooks.TritonPunishmentHook;
 import dev.wiji.bigminecraftapi.BigMinecraftAPI;
 import dev.wiji.bigminecraftapi.objects.ApiSettings;
 
+import java.util.UUID;
+
 public class TritonCoreCommon {
 	public static TritonCoreCommon INSTANCE;
 	public static ServerType SERVER_TYPE;
+
+	public static UUID CONSOLE_UUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
 	private final ConfigManager configManager;
 	private final CommandManager commandManager;
