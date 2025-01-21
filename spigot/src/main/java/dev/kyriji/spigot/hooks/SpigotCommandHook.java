@@ -38,6 +38,15 @@ public class SpigotCommandHook implements TritonCommandHook {
 					commandSender.sendMessage(chatManager.formatMessage("&cThis command can only be executed by console"));
 					return false;
 				}
+
+
+				if(commandSender instanceof SpigotPlayer player && command.getPermission() != null) {
+					if(!player.hasPermission(command.getPermission().getIdentifier())) {
+						player.sendMessage(chatManager.formatMessage("&cYou do not have permission to execute this command"));
+						return false;
+					}
+				}
+
 			}
 			command.execute(commandSender, args);
 			return false;

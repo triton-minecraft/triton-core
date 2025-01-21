@@ -9,6 +9,7 @@ import dev.kyriji.common.models.TritonCommandSender;
 import dev.kyriji.common.models.TritonProfile;
 import dev.kyriji.common.playerdata.controllers.PlayerDataManager;
 import dev.kyriji.common.playerdata.documents.NetworkData;
+import dev.kyriji.common.playerdata.enums.Permission;
 import dev.kyriji.common.playerdata.enums.PlayerDataType;
 import dev.kyriji.common.playerdata.utils.PlayerDataUtils;
 
@@ -24,6 +25,11 @@ public class IgnoreCommand extends TritonCommand {
 	@Override
 	public String getDescription() {
 		return "";
+	}
+
+	@Override
+	public Permission getPermission() {
+		return null;
 	}
 
 	@Override

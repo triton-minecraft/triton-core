@@ -31,6 +31,8 @@ public class VelocityCommandHook implements TritonCommandHook {
 		TritonCoreVelocity.INSTANCE.getCommandManager().register(commandMeta, new SimpleCommand() {
 			@Override
 			public void execute(Invocation invocation) {
+				ChatManager chatManager = TritonCoreCommon.INSTANCE.getChatManager();
+
 				VelocityCommandSender velocitySender;
 
 				if(invocation.source() instanceof Player) {
@@ -40,8 +42,6 @@ public class VelocityCommandHook implements TritonCommandHook {
 				}
 
 				if(command.getExecutorType() != ExecutorType.ALL) {
-					ChatManager chatManager = TritonCoreCommon.INSTANCE.getChatManager();
-
 					if(command.getExecutorType() == ExecutorType.PLAYER && !(invocation.source() instanceof Player)) {
 						velocitySender.sendMessage(chatManager.formatMessage("&cThis command can only be executed by a player"));
 						return;
@@ -49,6 +49,13 @@ public class VelocityCommandHook implements TritonCommandHook {
 
 					if(command.getExecutorType() == ExecutorType.CONSOLE && invocation.source() instanceof Player) {
 						velocitySender.sendMessage(chatManager.formatMessage("&cThis command can only be executed by console"));
+						return;
+					}
+				}
+
+				if(velocitySender instanceof VelocityPlayer player && command.getPermission() != null) {
+					if(!player.hasPermission(command.getPermission().getIdentifier())) {
+						player.sendMessage(chatManager.formatMessage("&cYou do not have permission to execute this command"));
 						return;
 					}
 				}

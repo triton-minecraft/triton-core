@@ -31,6 +31,11 @@ public class LogsCommand extends TritonCommand {
 	}
 
 	@Override
+	public Permission getPermission() {
+		return Permission.STAFF;
+	}
+
+	@Override
 	public CommandType getCommandType() {
 		return CommandType.UNIVERSAL;
 	}
@@ -53,11 +58,6 @@ public class LogsCommand extends TritonCommand {
 	@Override
 	public void execute(TritonCommandSender player, String[] args) {
 		ChatManager chatManager = TritonCoreCommon.INSTANCE.getChatManager();
-
-		if(player instanceof TritonPlayer && !((TritonPlayer) player).hasPermission(Permission.STAFF.getIdentifier())) {
-			player.sendMessage(chatManager.formatMessage("&cYou do not have permission to use this command"));
-			return;
-		}
 
 		if(args.length == 0) {
 			player.sendMessage(chatManager.formatMessage("&cUsage: /logs <player>"));

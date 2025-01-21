@@ -27,13 +27,6 @@ public class PunishmentUtils {
 	public static void applyPunishment(TritonCommandSender player, String[] args, PunishmentType punishmentType) {
 		ChatManager chatManager = TritonCoreCommon.INSTANCE.getChatManager();
 
-		if(player instanceof TritonPlayer) {
-			if(!((TritonPlayer) player).hasPermission(Permission.STAFF.getIdentifier())) {
-				player.sendMessage(chatManager.formatMessage("&cYou do not have permission to use this command"));
-				return;
-			}
-		}
-
 		if(args.length < 1) {
 			sendUsageMessage(player, punishmentType);
 			return;

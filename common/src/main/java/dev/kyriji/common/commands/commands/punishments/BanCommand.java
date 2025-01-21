@@ -5,11 +5,11 @@ import dev.kyriji.common.commands.enums.CommandType;
 import dev.kyriji.common.commands.enums.ExecutorType;
 import dev.kyriji.common.commands.models.TritonCommand;
 import dev.kyriji.common.models.TritonCommandSender;
+import dev.kyriji.common.playerdata.enums.Permission;
 import dev.kyriji.common.punishments.enums.suggestions.BanReasonSuggestion;
 import dev.kyriji.common.punishments.enums.suggestions.DurationSuggestion;
 import dev.kyriji.common.punishments.enums.PunishmentType;
 import dev.kyriji.common.punishments.utils.PunishmentUtils;
-import dev.wiji.bigminecraftapi.BigMinecraftAPI;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,6 +24,11 @@ public class BanCommand extends TritonCommand {
 	@Override
 	public String getDescription() {
 		return "Ban a player from the network";
+	}
+
+	@Override
+	public Permission getPermission() {
+		return Permission.STAFF;
 	}
 
 	@Override

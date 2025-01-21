@@ -10,6 +10,7 @@ import dev.kyriji.common.models.TritonCommandSender;
 import dev.kyriji.common.models.TritonProfile;
 import dev.kyriji.common.playerdata.controllers.PlayerDataManager;
 import dev.kyriji.common.playerdata.documents.PunishmentData;
+import dev.kyriji.common.playerdata.enums.Permission;
 import dev.kyriji.common.playerdata.enums.PlayerDataType;
 import dev.kyriji.common.playerdata.utils.PlayerDataUtils;
 import dev.kyriji.common.punishments.enums.PunishmentType;
@@ -34,6 +35,11 @@ public class MuteCommand extends TritonCommand {
 	@Override
 	public String getDescription() {
 		return "Mute a player from the network";
+	}
+
+	@Override
+	public Permission getPermission() {
+		return Permission.STAFF;
 	}
 
 	@Override

@@ -6,6 +6,7 @@ import dev.kyriji.common.commands.enums.CommandType;
 import dev.kyriji.common.commands.enums.ExecutorType;
 import dev.kyriji.common.commands.hooks.TritonCommandHook;
 import dev.kyriji.common.commands.models.TritonCommand;
+import dev.kyriji.common.models.TritonPlayer;
 import dev.kyriji.minestom.implementation.MinestomCommandSender;
 import dev.kyriji.minestom.implementation.MinestomPlayer;
 import net.minestom.server.MinecraftServer;
@@ -21,13 +22,14 @@ public class MinestomCommandHook implements TritonCommandHook {
 
 		Command commandInstance = new Command(command.getIdentifier()) {{
 			setDefaultExecutor((sender, context) -> {
+				ChatManager chatManager = TritonCoreCommon.INSTANCE.getChatManager();
+
 				MinestomCommandSender minestomSender;
 
 				if(sender instanceof Player) minestomSender = new MinestomPlayer((Player) sender);
 				else minestomSender = new MinestomCommandSender(sender);
 
 				if(command.getExecutorType() != ExecutorType.ALL) {
-					ChatManager chatManager = TritonCoreCommon.INSTANCE.getChatManager();
 
 					if(command.getExecutorType() == ExecutorType.PLAYER && !(sender instanceof Player)) {
 						minestomSender.sendMessage(chatManager.formatMessage("&cThis command can only be executed by a player"));
@@ -36,6 +38,13 @@ public class MinestomCommandHook implements TritonCommandHook {
 
 					if(command.getExecutorType() == ExecutorType.CONSOLE && sender instanceof Player) {
 						minestomSender.sendMessage(chatManager.formatMessage("&cThis command can only be executed by console"));
+						return;
+					}
+				}
+
+				if(minestomSender instanceof MinestomPlayer player && command.getPermission() != null) {
+					if(!player.hasPermission(command.getPermission().getIdentifier())) {
+						player.sendMessage(chatManager.formatMessage("&cYou do not have permission to use this command"));
 						return;
 					}
 				}

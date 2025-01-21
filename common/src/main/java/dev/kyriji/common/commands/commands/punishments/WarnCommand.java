@@ -5,6 +5,7 @@ import dev.kyriji.common.commands.enums.CommandType;
 import dev.kyriji.common.commands.enums.ExecutorType;
 import dev.kyriji.common.commands.models.TritonCommand;
 import dev.kyriji.common.models.TritonCommandSender;
+import dev.kyriji.common.playerdata.enums.Permission;
 import dev.kyriji.common.punishments.enums.PunishmentType;
 import dev.kyriji.common.punishments.enums.suggestions.BanReasonSuggestion;
 import dev.kyriji.common.punishments.enums.suggestions.DurationSuggestion;
@@ -26,6 +27,11 @@ public class WarnCommand extends TritonCommand {
 	@Override
 	public String getDescription() {
 		return "Warn a player on the network";
+	}
+
+	@Override
+	public Permission getPermission() {
+		return Permission.STAFF;
 	}
 
 	@Override

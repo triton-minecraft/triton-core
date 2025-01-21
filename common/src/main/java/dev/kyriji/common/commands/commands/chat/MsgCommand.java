@@ -10,6 +10,7 @@ import dev.kyriji.common.models.TritonPlayer;
 import dev.kyriji.common.models.TritonProfile;
 import dev.kyriji.common.playerdata.controllers.PlayerDataManager;
 import dev.kyriji.common.playerdata.documents.PunishmentData;
+import dev.kyriji.common.playerdata.enums.Permission;
 import dev.kyriji.common.playerdata.enums.PlayerDataType;
 import dev.kyriji.common.punishments.models.PunishmentAction;
 import dev.kyriji.common.punishments.models.TimedPunishmentAction;
@@ -32,6 +33,11 @@ public class MsgCommand extends TritonCommand {
 	@Override
 	public String getDescription() {
 		return "Private message another player";
+	}
+
+	@Override
+	public Permission getPermission() {
+		return null;
 	}
 
 	@Override
