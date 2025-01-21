@@ -238,13 +238,14 @@ public class PunishmentUtils {
 
 	public static PunishmentAction getActivePunishment(TritonProfile player, PunishmentType type, PunishmentType overrideType) {
 		PunishmentData data = PlayerDataManager.getTemporaryPlayerData(player.getUuid(), PlayerDataType.PUNISHMENT);
-		if(data == null) return null;
+		if (data == null) return null;
 
 		List<PunishmentAction> punishments = data.getPunishments().stream()
 				.filter(punishment -> punishment.getPunishmentType() == type)
+				.sorted(Comparator.comparingLong(PunishmentAction::getTime).reversed()) // Sort by time (most recent first)
 				.toList();
 
-		if(punishments.isEmpty()) return null;
+		if (punishments.isEmpty()) return null;
 
 		PunishmentAction mostRecentOverride = data.getPunishments().stream()
 				.filter(punishment -> punishment.getPunishmentType() == overrideType)
@@ -252,13 +253,13 @@ public class PunishmentUtils {
 				.orElse(null);
 
 		for (PunishmentAction punishment : punishments) {
-			if(mostRecentOverride != null && mostRecentOverride.getTime() > punishment.getTime()) {
+			if (mostRecentOverride != null && mostRecentOverride.getTime() > punishment.getTime()) {
 				continue;
 			}
 
-			if(punishment instanceof TimedPunishmentAction timedPunishment) {
+			if (punishment instanceof TimedPunishmentAction timedPunishment) {
 				long duration = timedPunishment.getDuration();
-				if(duration == -1 || System.currentTimeMillis() < punishment.getTime() + duration * 1000) {
+				if (duration == -1 || System.currentTimeMillis() < punishment.getTime() + duration * 1000) {
 					return punishment;
 				}
 			} else {

@@ -2,6 +2,7 @@ package dev.kyriji.common.commands.commands.punishments;
 
 import dev.kyriji.common.TritonCoreCommon;
 import dev.kyriji.common.chat.controllers.ChatManager;
+import dev.kyriji.common.chat.utils.ChatUtils;
 import dev.kyriji.common.commands.enums.CommandType;
 import dev.kyriji.common.commands.enums.ExecutorType;
 import dev.kyriji.common.commands.models.TritonCommand;
@@ -9,9 +10,13 @@ import dev.kyriji.common.models.TritonCommandSender;
 import dev.kyriji.common.models.TritonPlayer;
 import dev.kyriji.common.models.TritonProfile;
 import dev.kyriji.common.playerdata.enums.Permission;
+import dev.kyriji.common.punishments.enums.suggestions.BanReasonSuggestion;
+import dev.kyriji.common.punishments.enums.suggestions.DurationSuggestion;
 import dev.kyriji.common.punishments.models.PaginatedPunishments;
 import dev.kyriji.common.punishments.utils.PunishmentUtils;
+import dev.wiji.bigminecraftapi.BigMinecraftAPI;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LogsCommand extends TritonCommand {
@@ -37,7 +42,12 @@ public class LogsCommand extends TritonCommand {
 
 	@Override
 	public List<String> getTabCompletions(TritonCommandSender sender, String[] args) {
-		return List.of();
+		if(args.length <= 1) {
+			String hint = args.length == 0 ? "" : args[0];
+			return new ArrayList<>(ChatUtils.getOnlinePlayerNames(hint));
+		} else {
+			return List.of();
+		}
 	}
 
 	@Override
@@ -62,7 +72,7 @@ public class LogsCommand extends TritonCommand {
 		}
 
 		PaginatedPunishments paginatePunishments = PunishmentUtils.paginatePunishments(target);
-		if(paginatePunishments == null) {
+		if(paginatePunishments == null || paginatePunishments.getTotalPages() == 0) {
 			player.sendMessage(chatManager.formatMessage("&cNo punishment logs found"));
 			return;
 		}
