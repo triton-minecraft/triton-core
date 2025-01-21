@@ -216,7 +216,7 @@ public class PunishmentUtils {
 
 	public static String getKickMessage(PunishmentAction punishmentAction) {
 		return String.format(ChatManager.SERVER_LOGO + "\n\n" +
-						"&cYou have been kicked from the network" +
+						"&cYou have been kicked from the network\n" +
 						"&7Reason: &f%s\n\n" +
 						"&bFurther violations may in a ban",
 				punishmentAction.getReason());
