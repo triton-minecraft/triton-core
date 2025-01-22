@@ -14,13 +14,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandSendEvent;
+import org.bukkit.event.server.TabCompleteEvent;
 import org.bukkit.plugin.Plugin;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class SpigotCommandHook implements TritonCommandHook, Listener {
-	public static List<TritonCommand> registeredCommands = new ArrayList<>();
+	public static Map<String, TritonCommand> registeredCommands = new HashMap<>();
 
 	public SpigotCommandHook() {
 		Plugin plugin = TritonCoreSpigot.INSTANCE;
@@ -66,18 +66,41 @@ public class SpigotCommandHook implements TritonCommandHook, Listener {
 			return false;
 		});
 
-		registeredCommands.add(command);
+		registeredCommands.put(command.getIdentifier(), command);
 	}
 
 	@EventHandler
 	public void onCommandSend(PlayerCommandSendEvent event) {
 		event.getCommands().removeIf(command ->
-				registeredCommands.stream()
+				registeredCommands.values().stream()
 						.filter(tritonCommand -> command.contains(tritonCommand.getIdentifier()))
 						.anyMatch(tritonCommand ->
 								tritonCommand.getPermission() != null &&
 										!event.getPlayer().hasPermission(tritonCommand.getPermission().getIdentifier())
 						)
 		);
+	}
+
+	@EventHandler
+	public void onTabComplete(TabCompleteEvent event) {
+		String text = event.getBuffer();
+
+		boolean endsWithSpace = text.endsWith(" ");
+		String[] args = text.split(" ");
+
+		if (endsWithSpace) {
+			args = Arrays.copyOf(args, args.length + 1);
+			args[args.length - 1] = "";
+		}
+
+		TritonCommand command = registeredCommands.get(args[0].replace("/", ""));
+		if (command == null) return;
+
+		SpigotPlayer player = new SpigotPlayer((Player) event.getSender());
+
+		args = Arrays.copyOfRange(args, 1, args.length);
+		List<String> suggestions = command.getTabCompletions(player, args);
+
+		event.setCompletions(suggestions);
 	}
 }

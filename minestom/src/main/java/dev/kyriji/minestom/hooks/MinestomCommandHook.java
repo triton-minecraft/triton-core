@@ -131,8 +131,6 @@ public class MinestomCommandHook implements TritonCommandHook {
 						args[args.length - 1] = "";
 					}
 
-					System.out.println("Args: " + Arrays.toString(args));
-
 					TritonCommand command = registeredCommands.get(args[0].replace("/", ""));
 					if (command == null) return;
 
