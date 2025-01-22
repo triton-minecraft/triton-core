@@ -9,13 +9,16 @@ import dev.kyriji.common.config.models.MongoConnection;
 import dev.kyriji.common.database.controllers.DatabaseManager;
 import dev.kyriji.common.database.enums.DatabaseType;
 import dev.kyriji.common.database.records.DatabaseConnection;
+import dev.kyriji.common.models.TritonProfile;
 import dev.kyriji.common.playerdata.documents.NetworkData;
 import dev.kyriji.common.playerdata.enums.PlayerDataType;
 import dev.kyriji.common.playerdata.hooks.TritonPlayerDataHook;
 import dev.kyriji.common.playerdata.models.PlayerDataDocument;
+import dev.kyriji.common.playerdata.utils.PlayerDataUtils;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -94,7 +97,7 @@ public class PlayerDataManager {
 
 	private static final Map<UUID, List<PlayerDataDocument>> loadedPlayerData = new HashMap<>();
 
-	public static <T extends PlayerDataDocument> T getTemporaryPlayerData(String name, PlayerDataType type) {
+	public static <T> T getTemporaryPlayerData(String name, PlayerDataType type) {
 		DatabaseConnection connection = DatabaseManager.getDatabase(DatabaseType.PLAYER_DATA);
 
 		@SuppressWarnings("unchecked")
@@ -103,16 +106,45 @@ public class PlayerDataManager {
 		MongoCollection<T> collection = connection.database().getCollection(type.getCollectionName(), documentClass);
 
 		Pattern pattern = Pattern.compile("^" + Pattern.quote(name) + "$", Pattern.CASE_INSENSITIVE);
+		T document = collection.find(regex("name", pattern)).first();
 
-		return collection.find(regex("name", pattern)).first();
+		if(document != null) {
+			return document;
+		}
+
+		if(type == PlayerDataType.NETWORK) {
+			return null;
+		}
+
+		TritonProfile profile = PlayerDataUtils.loadUser(name);
+
+		if(profile == null) {
+			return null;
+		}
+
+		try {
+			T newInstance = documentClass.getDeclaredConstructor().newInstance();
+			if (newInstance instanceof PlayerDataDocument) {
+				((PlayerDataDocument) newInstance).setUuid(profile.getUuid().toString());
+				collection.insertOne(newInstance);
+				return newInstance;
+			}
+		} catch (InstantiationException | IllegalAccessException | NoSuchMethodException |
+				 InvocationTargetException e) {
+			e.printStackTrace();
+		}
+
+		return document;
 	}
 
-	public static <T extends PlayerDataDocument> T getTemporaryPlayerData(UUID uuid, PlayerDataType type) {
+	public static <T> T getTemporaryPlayerData(UUID uuid, PlayerDataType type) {
 		DatabaseConnection connection = DatabaseManager.getDatabase(DatabaseType.PLAYER_DATA);
 
-		if(loadedPlayerData.containsKey(uuid)) {
-			for(PlayerDataDocument document : loadedPlayerData.get(uuid)) {
-				if(document.getClass().equals(type.getDocumentClass())) return (T) document;
+		if (loadedPlayerData.containsKey(uuid)) {
+			for (PlayerDataDocument document : loadedPlayerData.get(uuid)) {
+				if (document.getClass().equals(type.getDocumentClass())) {
+					return (T) document;
+				}
 			}
 		}
 
@@ -121,8 +153,24 @@ public class PlayerDataManager {
 
 		MongoCollection<T> collection = connection.database().getCollection(type.getCollectionName(), documentClass);
 
-		return collection.find(eq("uuid", uuid.toString())).first();
+		T document = collection.find(eq("uuid", uuid.toString())).first();
+
+		if (document == null) {
+			try {
+				T newInstance = documentClass.getDeclaredConstructor().newInstance();
+				if (newInstance instanceof PlayerDataDocument) {
+					((PlayerDataDocument) newInstance).setUuid(uuid.toString());
+					collection.insertOne(newInstance);
+					return newInstance;
+				}
+			} catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return document;
 	}
+
 
 	public static <T extends PlayerDataDocument> T getPlayerData(UUID uuid, PlayerDataType type) {
 		T document = getTemporaryPlayerData(uuid, type);

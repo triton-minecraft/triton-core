@@ -11,8 +11,22 @@ import dev.kyriji.spigot.implementation.SpigotCommandSender;
 import dev.kyriji.spigot.implementation.SpigotPlayer;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerCommandSendEvent;
+import org.bukkit.plugin.Plugin;
 
-public class SpigotCommandHook implements TritonCommandHook {
+import java.util.ArrayList;
+import java.util.List;
+
+public class SpigotCommandHook implements TritonCommandHook, Listener {
+	public static List<TritonCommand> registeredCommands = new ArrayList<>();
+
+	public SpigotCommandHook() {
+		Plugin plugin = TritonCoreSpigot.INSTANCE;
+		plugin.getServer().getPluginManager().registerEvents(this, plugin);
+	}
+
 	@Override
 	public void registerCommand(TritonCommand command) {
 		if(command.getCommandType() != CommandType.SERVER && command.getCommandType() != CommandType.UNIVERSAL) return;
@@ -51,5 +65,19 @@ public class SpigotCommandHook implements TritonCommandHook {
 			command.execute(commandSender, args);
 			return false;
 		});
+
+		registeredCommands.add(command);
+	}
+
+	@EventHandler
+	public void onCommandSend(PlayerCommandSendEvent event) {
+		event.getCommands().removeIf(command ->
+				registeredCommands.stream()
+						.filter(tritonCommand -> command.contains(tritonCommand.getIdentifier()))
+						.anyMatch(tritonCommand ->
+								tritonCommand.getPermission() != null &&
+										!event.getPlayer().hasPermission(tritonCommand.getPermission().getIdentifier())
+						)
+		);
 	}
 }

@@ -39,6 +39,9 @@ public class TritonCoreVelocity {
 	public void onProxyInitialize(ProxyInitializeEvent event) {
 		ConfigManager.init();
 
+		VelocityCommandHook commandHook = new VelocityCommandHook();
+		INSTANCE.getEventManager().register(this, commandHook);
+
 		VelocityPlayerDataHook playerData = new VelocityPlayerDataHook();
 		INSTANCE.getEventManager().register(this, playerData);
 
@@ -47,7 +50,7 @@ public class TritonCoreVelocity {
 
 		TritonCoreCommon core = TritonCoreCommon.builder(ServerType.VELOCITY)
 				.withConfig(new VelocityConfigHook())
-				.withCommands(new VelocityCommandHook())
+				.withCommands(commandHook)
 				.withPlayerData(playerData)
 				.withPunishments(punishmentHook)
 				.withChat(new VelocityChatHook())

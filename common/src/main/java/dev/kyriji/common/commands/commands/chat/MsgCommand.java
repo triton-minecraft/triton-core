@@ -52,8 +52,8 @@ public class MsgCommand extends TritonCommand {
 
 	@Override
 	public List<String> getTabCompletions(TritonCommandSender sender, String[] args) {
-		if(args.length == 1) {
-			String partial = args[0].toLowerCase();
+		if(args.length <= 1) {
+			String partial = args.length > 0 ? args[0].toLowerCase(): "";
 			return BigMinecraftAPI.getNetworkManager().getPlayers().values().stream()
 					.filter(name -> name.toLowerCase().startsWith(partial))
 					.collect(Collectors.toList());
