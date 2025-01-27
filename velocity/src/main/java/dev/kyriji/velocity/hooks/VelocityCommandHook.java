@@ -1,7 +1,9 @@
 package dev.kyriji.velocity.hooks;
 
+import com.mojang.brigadier.tree.RootCommandNode;
 import com.velocitypowered.api.command.CommandMeta;
 import com.velocitypowered.api.command.SimpleCommand;
+import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.command.PlayerAvailableCommandsEvent;
 import com.velocitypowered.api.proxy.Player;
 import dev.kyriji.common.TritonCoreCommon;
@@ -14,11 +16,13 @@ import dev.kyriji.velocity.TritonCoreVelocity;
 import dev.kyriji.velocity.implementation.VelocityCommandSender;
 import dev.kyriji.velocity.implementation.VelocityPlayer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class VelocityCommandHook implements TritonCommandHook {
+	public static List<TritonCommand> commands = new ArrayList<>();
 
 	@Override
 	public void registerCommand(TritonCommand command) {
@@ -76,5 +80,19 @@ public class VelocityCommandHook implements TritonCommandHook {
 				return command.getTabCompletions(velocitySender, invocation.arguments());
 			}
 		});
+
+		commands.add(command);
+	}
+
+	@Subscribe
+	public void onPlayerAvailableCommands(PlayerAvailableCommandsEvent event) {
+		RootCommandNode<?> node = event.getRootNode();
+
+		VelocityPlayer player = new VelocityPlayer(event.getPlayer());
+		for(TritonCommand command : commands) {
+			if(command.getPermission() != null && !player.hasPermission(command.getPermission().getIdentifier())) {
+				node.removeChildByName(command.getIdentifier());
+			}
+		}
 	}
 }
