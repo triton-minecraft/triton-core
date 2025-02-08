@@ -19,7 +19,7 @@ dependencies {
 }
 
 tasks.shadowJar {
-    archiveClassifier.set("") // This removes the '-all' suffix from the output jar
+    archiveClassifier.set("")
 }
 
 tasks.build {
