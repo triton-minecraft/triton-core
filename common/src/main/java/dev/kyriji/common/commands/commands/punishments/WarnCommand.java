@@ -25,6 +25,11 @@ public class WarnCommand extends TritonCommand {
 	}
 
 	@Override
+	public List<String> getAliases() {
+		return List.of();
+	}
+
+	@Override
 	public String getDescription() {
 		return "Warn a player on the network";
 	}

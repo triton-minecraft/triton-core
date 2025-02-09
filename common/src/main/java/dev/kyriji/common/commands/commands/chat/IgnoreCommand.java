@@ -23,6 +23,11 @@ public class IgnoreCommand extends TritonCommand {
 	}
 
 	@Override
+	public List<String> getAliases() {
+		return List.of();
+	}
+
+	@Override
 	public String getDescription() {
 		return "";
 	}

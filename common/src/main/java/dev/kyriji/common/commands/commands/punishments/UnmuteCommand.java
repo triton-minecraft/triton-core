@@ -21,6 +21,11 @@ public class UnmuteCommand extends TritonCommand {
 	}
 
 	@Override
+	public List<String> getAliases() {
+		return List.of();
+	}
+
+	@Override
 	public String getDescription() {
 		return "Unmute a player from the network";
 	}

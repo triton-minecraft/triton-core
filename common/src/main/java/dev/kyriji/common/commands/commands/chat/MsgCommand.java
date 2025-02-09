@@ -31,6 +31,11 @@ public class MsgCommand extends TritonCommand {
 	}
 
 	@Override
+	public List<String> getAliases() {
+		return List.of();
+	}
+
+	@Override
 	public String getDescription() {
 		return "Private message another player";
 	}

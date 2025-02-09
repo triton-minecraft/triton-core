@@ -26,6 +26,11 @@ public class LogsCommand extends TritonCommand {
 	}
 
 	@Override
+	public List<String> getAliases() {
+		return List.of();
+	}
+
+	@Override
 	public String getDescription() {
 		return "Provides punishment logs for a player";
 	}

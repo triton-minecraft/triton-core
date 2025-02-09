@@ -23,6 +23,11 @@ public class IpBanCommand extends TritonCommand {
 	}
 
 	@Override
+	public List<String> getAliases() {
+		return List.of();
+	}
+
+	@Override
 	public String getDescription() {
 		return "IP Ban a player from the network";
 	}

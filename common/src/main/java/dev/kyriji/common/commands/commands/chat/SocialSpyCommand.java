@@ -21,6 +21,11 @@ public class SocialSpyCommand extends TritonCommand {
 	}
 
 	@Override
+	public List<String> getAliases() {
+		return List.of("ss");
+	}
+
+	@Override
 	public String getDescription() {
 		return "Staff command to toggle social spy";
 	}

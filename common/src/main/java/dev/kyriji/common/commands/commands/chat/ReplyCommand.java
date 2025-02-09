@@ -22,7 +22,12 @@ import java.util.*;
 public class ReplyCommand extends TritonCommand {
 	@Override
 	public String getIdentifier() {
-		return "r";
+		return "reply";
+	}
+
+	@Override
+	public List<String> getAliases() {
+		return List.of("r");
 	}
 
 	@Override

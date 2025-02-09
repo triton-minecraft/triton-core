@@ -33,6 +33,11 @@ public class MuteCommand extends TritonCommand {
 	}
 
 	@Override
+	public List<String> getAliases() {
+		return List.of();
+	}
+
+	@Override
 	public String getDescription() {
 		return "Mute a player from the network";
 	}

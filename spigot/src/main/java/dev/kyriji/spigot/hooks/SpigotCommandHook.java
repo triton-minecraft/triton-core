@@ -34,6 +34,8 @@ public class SpigotCommandHook implements TritonCommandHook, Listener {
 		PluginCommand spigotCommand = TritonCoreSpigot.INSTANCE.getCommand(command.getIdentifier());
 		if(spigotCommand == null) throw new NullPointerException("Command " + command.getIdentifier() + " failed to register");
 
+		spigotCommand.setAliases(command.getAliases());
+
 		spigotCommand.setExecutor((sender, cmd, label, args) -> {
 			SpigotCommandSender commandSender;
 

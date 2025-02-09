@@ -50,7 +50,7 @@ public class MinestomCommandHook implements TritonCommandHook {
 	public void registerCommand(TritonCommand command) {
 		if(command.getCommandType() != CommandType.SERVER && command.getCommandType() != CommandType.UNIVERSAL) return;
 
-		Command commandInstance = new Command(command.getIdentifier());
+		Command commandInstance = new Command(command.getIdentifier(), command.getAliases().toArray(new String[0]));
 		commandInstance.setDefaultExecutor((sender, context) -> {
 			execute(command, sender, context);
 		});

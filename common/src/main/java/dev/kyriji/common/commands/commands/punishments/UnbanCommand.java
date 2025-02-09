@@ -20,6 +20,11 @@ public class UnbanCommand extends TritonCommand {
 	}
 
 	@Override
+	public List<String> getAliases() {
+		return List.of();
+	}
+
+	@Override
 	public String getDescription() {
 		return "Unban a player from the network";
 	}

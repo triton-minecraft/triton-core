@@ -30,6 +30,7 @@ public class VelocityCommandHook implements TritonCommandHook {
 
 		CommandMeta commandMeta = TritonCoreVelocity.INSTANCE.getCommandManager()
 				.metaBuilder(command.getIdentifier())
+				.aliases(command.getAliases().toArray(new String[0]))
 				.build();
 
 		TritonCoreVelocity.INSTANCE.getCommandManager().register(commandMeta, new SimpleCommand() {

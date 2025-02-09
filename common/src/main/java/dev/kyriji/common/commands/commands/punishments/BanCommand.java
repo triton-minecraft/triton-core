@@ -22,6 +22,11 @@ public class BanCommand extends TritonCommand {
 	}
 
 	@Override
+	public List<String> getAliases() {
+		return List.of();
+	}
+
+	@Override
 	public String getDescription() {
 		return "Ban a player from the network";
 	}

@@ -9,6 +9,7 @@ import java.util.List;
 
 public abstract class TritonCommand {
 	public abstract String getIdentifier();
+	public abstract List<String> getAliases();
 	public abstract String getDescription();
 	public abstract Permission getPermission();
 	public abstract CommandType getCommandType();
