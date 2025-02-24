@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "fabric",
+  "version": "${version}",
+
+  "name": "TritonCoreFabric",
+  "description": "",
+  "authors": [],
+  "contact": {},
+
+  "license": "All-Rights-Reserved",
+  "icon": "assets/fabric/icon.png",
+
+  "environment": "server",
+  "entrypoints": {
+    "main": [
+      "dev.kyriji.fabric.TritonCoreFabric"
+    ]
+  },
+
+  "mixins": [
+    "fabric.mixins.json"
+    ,{
+      "config": "fabric.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
