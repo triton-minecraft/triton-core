@@ -8,13 +8,11 @@ import dev.kyriji.common.commands.commands.chat.MsgCommand;
 import dev.kyriji.common.commands.commands.chat.ReplyCommand;
 import dev.kyriji.common.commands.commands.chat.SocialSpyCommand;
 import dev.kyriji.common.commands.controllers.CommandManager;
-import dev.kyriji.common.enums.ServerType;
 import dev.kyriji.common.models.TritonPlayer;
 import dev.kyriji.common.models.TritonProfile;
 import dev.kyriji.common.playerdata.controllers.PlayerDataManager;
 import dev.kyriji.common.playerdata.documents.NetworkData;
 import dev.kyriji.common.playerdata.enums.PlayerDataType;
-import net.luckperms.api.LuckPerms;
 import net.luckperms.api.model.group.Group;
 import net.luckperms.api.model.user.User;
 
@@ -60,30 +58,15 @@ public class ChatManager {
 	}
 
 	public String formatPlayerName(TritonProfile player) {
-		LuckPerms api = TritonCoreCommon.INSTANCE.getPlayerDataManager().getLuckPerms();
-		if(api == null) throw new NullPointerException("LuckPerms API not found");
+		PlayerDataManager playerDataManager = TritonCoreCommon.INSTANCE.getPlayerDataManager();
+		User user = playerDataManager.getLuckPermsUser(player);
 
-		User user = api.getUserManager().getUser(player.getUuid());
-
-		if(user == null) {
-			try {
-				user = api.getUserManager().loadUser(player.getUuid()).join();
-			} catch (Exception e) {
-				e.printStackTrace();
-				return formatMessage("&7" + player.getName() + "&r");
-			}
-		}
-
-		if(user == null) {
-			return formatMessage("&7" + player.getName() + "&r");
-		}
+		if(user == null) return formatMessage("&7" + player.getName() + "&r");
 
 		String groupName = user.getPrimaryGroup();
-		Group group = api.getGroupManager().getGroup(groupName);
+		Group group = playerDataManager.getLuckPermsGroup(groupName);
 
-		if(group == null) {
-			return formatMessage("&7" + player.getName() + "&r");
-		}
+		if(group == null) return formatMessage("&7" + player.getName() + "&r");
 
 		String prefix = formatMessage("&7[" + group.getDisplayName() + "&7] ");
 		String name = formatMessage(group.getCachedData().getMetaData().getPrefix() + player.getName() + "&r");

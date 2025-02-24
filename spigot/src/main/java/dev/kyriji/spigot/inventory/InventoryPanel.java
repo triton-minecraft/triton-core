@@ -11,7 +11,6 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 public abstract class InventoryPanel implements InventoryHolder, Listener {
 
@@ -19,7 +18,6 @@ public abstract class InventoryPanel implements InventoryHolder, Listener {
 	private Inventory inventory;
 	private boolean closable = isClosable();
 
-	@NotNull
 	@Override
 	public Inventory getInventory() {
 		return inventory;

@@ -16,6 +16,8 @@ import dev.kyriji.common.playerdata.controllers.PlayerDataManager;
 import dev.kyriji.common.playerdata.hooks.TritonPlayerDataHook;
 import dev.kyriji.common.punishments.controllers.PunishmentManager;
 import dev.kyriji.common.punishments.hooks.TritonPunishmentHook;
+import dev.kyriji.common.tab.controllers.TabListManager;
+import dev.kyriji.common.tab.hooks.TritonTabListHook;
 import dev.wiji.bigminecraftapi.BigMinecraftAPI;
 import dev.wiji.bigminecraftapi.objects.ApiSettings;
 
@@ -33,6 +35,7 @@ public class TritonCoreCommon {
 	private final InventoryManager inventoryManager;
 	private final ChatManager chatManager;
 	private final PunishmentManager punishmentManager;
+	private final TabListManager tabListManager;
 
 	private TritonCoreCommon(Builder builder) {
 		INSTANCE = this;
@@ -56,6 +59,7 @@ public class TritonCoreCommon {
 		this.inventoryManager = builder.inventoryManager;
 		this.chatManager = builder.chatManager;
 		this.punishmentManager = builder.punishmentManager;
+		this.tabListManager = builder.tabListManager;
 
 		if(chatManager != null) chatManager.init();
 		if(punishmentManager != null) punishmentManager.init();
@@ -90,6 +94,10 @@ public class TritonCoreCommon {
 		return punishmentManager;
 	}
 
+	public TabListManager getTabListManager() {
+		return tabListManager;
+	}
+
 	public static class Builder {
 		private ConfigManager configManager;
 		private CommandManager commandManager;
@@ -97,6 +105,7 @@ public class TritonCoreCommon {
 		private InventoryManager inventoryManager;
 		private ChatManager chatManager;
 		private PunishmentManager punishmentManager;
+		private TabListManager tabListManager;
 
 		private Builder() {
 		}
@@ -128,6 +137,11 @@ public class TritonCoreCommon {
 
 		public Builder withPunishments(TritonPunishmentHook punishmentHook) {
 			this.punishmentManager = new PunishmentManager(punishmentHook);
+			return this;
+		}
+
+		public Builder withTabList(TritonTabListHook tabListHook) {
+			this.tabListManager = new TabListManager(tabListHook);
 			return this;
 		}
 

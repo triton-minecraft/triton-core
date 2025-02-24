@@ -31,16 +31,23 @@ public class TritonCoreMinestom {
 				.withPlayerData(new MinestomPlayerDataHook())
 				.withChat(new MinestomChatHook())
 				.withPunishments(new MinestomPunishmentHook())
+				.withTabList(new MinestomTabListHook())
 				.build();
 
 		Path directory = Path.of("luckperms");
 
-		luckPerms = LuckPermsMinestom.builder(directory)
-				.commandRegistry(CommandRegistry.minestom())
-				.configurationAdapter(plugin -> new MultiConfigurationAdapter(plugin,
-						new LuckpermsAdapter(plugin)
-				)).dependencyManager(true)
-				.enable();
+		try {
+			luckPerms = LuckPermsMinestom.builder(directory)
+					.commandRegistry(CommandRegistry.minestom())
+					.configurationAdapter(plugin -> new MultiConfigurationAdapter(plugin,
+							new LuckpermsAdapter(plugin)
+					)).dependencyManager(true)
+					.enable();
+		} catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("Failed to start LuckPerms");
+		}
+
 
 		CoreConfig coreConfig = dev.kyriji.common.config.controllers.ConfigManager.getConfig(ConfigType.CORE);
 		if(coreConfig == null) throw new NullPointerException("Core config not found");

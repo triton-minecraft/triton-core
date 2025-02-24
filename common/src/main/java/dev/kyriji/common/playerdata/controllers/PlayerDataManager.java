@@ -2,6 +2,7 @@ package dev.kyriji.common.playerdata.controllers;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.ReplaceOptions;
+import dev.kyriji.common.TritonCoreCommon;
 import dev.kyriji.common.config.controllers.ConfigManager;
 import dev.kyriji.common.config.documents.CoreConfig;
 import dev.kyriji.common.config.enums.ConfigType;
@@ -9,6 +10,7 @@ import dev.kyriji.common.config.models.MongoConnection;
 import dev.kyriji.common.database.controllers.DatabaseManager;
 import dev.kyriji.common.database.enums.DatabaseType;
 import dev.kyriji.common.database.records.DatabaseConnection;
+import dev.kyriji.common.models.TritonPlayer;
 import dev.kyriji.common.models.TritonProfile;
 import dev.kyriji.common.playerdata.documents.NetworkData;
 import dev.kyriji.common.playerdata.enums.PlayerDataType;
@@ -17,6 +19,8 @@ import dev.kyriji.common.playerdata.models.PlayerDataDocument;
 import dev.kyriji.common.playerdata.utils.PlayerDataUtils;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.LuckPermsProvider;
+import net.luckperms.api.model.group.Group;
+import net.luckperms.api.model.user.User;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -213,6 +217,31 @@ public class PlayerDataManager {
 			throw new IllegalStateException("LuckPerms is not yet initialized");
 		}
 		return luckPerms;
+	}
+
+	public User getLuckPermsUser(TritonProfile player) {
+		LuckPerms api = TritonCoreCommon.INSTANCE.getPlayerDataManager().getLuckPerms();
+		if(api == null) throw new NullPointerException("LuckPerms API not found");
+
+		User user = api.getUserManager().getUser(player.getUuid());
+
+		if(user == null) {
+			try {
+				user = api.getUserManager().loadUser(player.getUuid()).join();
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+
+		return user;
+	}
+
+	public Group getLuckPermsGroup(String groupName) {
+		LuckPerms api = TritonCoreCommon.INSTANCE.getPlayerDataManager().getLuckPerms();
+		if(api == null) throw new NullPointerException("LuckPerms API not found");
+
+		return api.getGroupManager().getGroup(groupName);
 	}
 
 	public void shutdown() {
