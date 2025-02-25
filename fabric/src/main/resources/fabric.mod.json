@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "fabric",
+  "id": "triton-core-fabric",
   "version": "${version}",
 
   "name": "TritonCoreFabric",
@@ -29,6 +29,8 @@
   "depends": {
     "fabricloader": ">=${loader_version}",
     "fabric": "*",
-    "minecraft": "${minecraft_version}"
+    "luckperms": "*",
+    "minecraft": "${minecraft_version}",
+    "triton-dependencies-fabric": "*"
   }
 }

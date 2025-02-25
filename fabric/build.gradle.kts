@@ -1,5 +1,6 @@
 plugins {
     id("fabric-loom") version "1.10-SNAPSHOT"
+    id("com.github.johnrengelman.shadow") version "7.0.0"
     id("maven-publish")
 }
 
@@ -22,22 +23,17 @@ loom {
 }
 
 repositories {
-    // Add repositories to retrieve artifacts from in here.
-    // You should only use this when depending on other mods because
-    // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-    // See https://docs.gradle.org/current/userguide/declaring_repositories.html
-    // for more information about repositories.
+    // Add repositories for dependencies here if needed.
 }
 
 dependencies {
     implementation(project(":common"))
+    compileOnly("net.luckperms:api:5.4")
 
-    // To change the versions see the gradle.properties file
     minecraft("com.mojang:minecraft:${project.property("minecraft_version")}")
     mappings(loom.officialMojangMappings())
-    modImplementation("net.fabricmc:fabric-loader:${project.property("loader_version")}")
-
-    modImplementation("net.fabricmc.fabric-api:fabric-api:${project.property("fabric_version")}")
+    modCompileOnly("net.fabricmc:fabric-loader:${project.property("loader_version")}")
+    modCompileOnly("net.fabricmc.fabric-api:fabric-api:${project.property("fabric_version")}")
 }
 
 tasks.processResources {
@@ -48,21 +44,17 @@ tasks.processResources {
 
     filesMatching("fabric.mod.json") {
         expand(
-                mapOf(
-                        "version" to project.version,
-                        "minecraft_version" to project.property("minecraft_version"),
-                        "loader_version" to project.property("loader_version")
-                )
+            mapOf(
+                "version" to project.version,
+                "minecraft_version" to project.property("minecraft_version"),
+                "loader_version" to project.property("loader_version")
+            )
         )
     }
 }
 
 val targetJavaVersion = 21
 tasks.withType<JavaCompile>().configureEach {
-    // ensure that the encoding is set to UTF-8, no matter what the system default is
-    // this fixes some edge cases with special characters not displaying correctly
-    // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
-    // If Javadoc is generated, this must be specified in that task too.
     options.encoding = "UTF-8"
     if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible) {
         options.release.set(targetJavaVersion)
@@ -74,32 +66,54 @@ java {
     if (JavaVersion.current() < javaVersion) {
         toolchain.languageVersion.set(JavaLanguageVersion.of(targetJavaVersion))
     }
-    // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-    // if it is present.
-    // If you remove this line, sources will not be generated.
     withSourcesJar()
 }
 
-tasks.jar {
-    from("LICENSE") {
-        rename { "${it}_${project.property("archivesBaseName")}" }
+tasks {
+    jar {
+        from("LICENSE") {
+            rename { "${it}_${project.property("archivesBaseName")}" }
+        }
+    }
+
+    // First make a dev JAR with embedded dependencies
+    shadowJar {
+        archiveClassifier.set("unmapped")
+        archiveVersion.set("")
+
+        mergeServiceFiles()
+
+        dependencies {
+            exclude(".*:.*:.*") // Exclude all dependencies
+            include(project(":common")) // Include only the common module
+        }
+    }
+
+    // Create a dedicated remap task for the shadow jar
+    val remapShadowJar = register<net.fabricmc.loom.task.RemapJarTask>("remapShadowJar") {
+        input.set(shadowJar.get().archiveFile)
+        dependsOn(shadowJar)
+        archiveClassifier.set("")
+    }
+
+    build {
+        dependsOn(remapJar)
+        dependsOn(remapShadowJar)
     }
 }
 
-// configure the maven publication
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
             artifactId = project.property("archives_base_name") as String
             from(components["java"])
         }
-    }
 
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-    repositories {
-        // Add repositories to publish to here.
-        // Notice: This block does NOT have the same function as the block in the top level.
-        // The repositories here will be used for publishing your artifact, not for
-        // retrieving dependencies.
+        create<MavenPublication>("shadow") {
+            project.shadow.component(this)
+            groupId = project.group.toString()
+            artifactId = project.name
+            version = project.version.toString()
+        }
     }
 }

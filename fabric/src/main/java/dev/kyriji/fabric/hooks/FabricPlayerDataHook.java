@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class FabricPlayerDataHook implements TritonPlayerDataHook {
+	public static Consumer<TritonProfile> joinCallback;
+	public static Consumer<TritonProfile> quitCallback;
+
 	@Override
 	public List<PlayerDataType> getAutoLoadedDataTypes() {
 		return List.of();
@@ -15,11 +18,11 @@ public class FabricPlayerDataHook implements TritonPlayerDataHook {
 
 	@Override
 	public void registerJoinCallback(Consumer<TritonProfile> callback) {
-
+		FabricPlayerDataHook.joinCallback = callback;
 	}
 
 	@Override
 	public void registerQuitCallback(Consumer<TritonProfile> callback) {
-
+		FabricPlayerDataHook.quitCallback = callback;
 	}
 }

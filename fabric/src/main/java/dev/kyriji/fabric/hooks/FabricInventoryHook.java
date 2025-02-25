@@ -8,17 +8,17 @@ import dev.kyriji.common.models.TritonPlayer;
 public class FabricInventoryHook implements TritonInventoryHook {
 	@Override
 	public void openInventory(TritonPlayer player, TritonInventory inventory) {
-
+		throw new UnsupportedOperationException("Not implemented yet");
 	}
 
 	@Override
 	public void closeInventory(TritonPlayer player, TritonInventory inventory) {
-
+		throw new UnsupportedOperationException("Not implemented yet");
 	}
 
 	@Override
 	public void updateInventory(TritonPlayer player, TritonInventory inventory) {
-
+		throw new UnsupportedOperationException("Not implemented yet");
 	}
 
 	@Override
