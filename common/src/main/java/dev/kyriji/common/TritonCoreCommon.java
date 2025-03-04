@@ -1,5 +1,7 @@
 package dev.kyriji.common;
 
+import dev.kyriji.bigminecraftapi.BigMinecraftAPI;
+import dev.kyriji.bigminecraftapi.objects.ApiSettings;
 import dev.kyriji.common.chat.controllers.ChatManager;
 import dev.kyriji.common.chat.hooks.TritonChatHook;
 import dev.kyriji.common.commands.controllers.CommandManager;
@@ -18,8 +20,6 @@ import dev.kyriji.common.punishments.controllers.PunishmentManager;
 import dev.kyriji.common.punishments.hooks.TritonPunishmentHook;
 import dev.kyriji.common.tab.controllers.TabListManager;
 import dev.kyriji.common.tab.hooks.TritonTabListHook;
-import dev.wiji.bigminecraftapi.BigMinecraftAPI;
-import dev.wiji.bigminecraftapi.objects.ApiSettings;
 
 import java.util.UUID;
 

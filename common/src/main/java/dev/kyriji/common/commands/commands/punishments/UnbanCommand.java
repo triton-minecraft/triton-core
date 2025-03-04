@@ -8,7 +8,6 @@ import dev.kyriji.common.models.TritonCommandSender;
 import dev.kyriji.common.playerdata.enums.Permission;
 import dev.kyriji.common.punishments.enums.PunishmentType;
 import dev.kyriji.common.punishments.utils.PunishmentUtils;
-import dev.wiji.bigminecraftapi.BigMinecraftAPI;
 
 import java.util.ArrayList;
 import java.util.List;

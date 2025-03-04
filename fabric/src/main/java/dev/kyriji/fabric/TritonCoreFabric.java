@@ -24,7 +24,7 @@ public class TritonCoreFabric implements ModInitializer {
 
             TritonCoreFabric.server = server;
             luckPerms = LuckPermsProvider.get();
-            core = TritonCoreCommon.builder(ServerType.MINESTOM)
+            core = TritonCoreCommon.builder(ServerType.FABRIC)
                     .withConfig(new FabricConfigHook())
                     .withCommands(new FabricCommandHook())
                     .withInventory(new FabricInventoryHook())

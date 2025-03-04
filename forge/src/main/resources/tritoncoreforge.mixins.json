@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.kyriji.forge.mixins",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "tritoncoreforge.refmap.json",
+  "mixins": [
+    "CommandSendMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

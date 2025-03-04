@@ -10,7 +10,7 @@ import dev.kyriji.common.punishments.enums.suggestions.BanReasonSuggestion;
 import dev.kyriji.common.punishments.enums.suggestions.DurationSuggestion;
 import dev.kyriji.common.punishments.enums.PunishmentType;
 import dev.kyriji.common.punishments.utils.PunishmentUtils;
-import dev.wiji.bigminecraftapi.BigMinecraftAPI;
+import dev.kyriji.bigminecraftapi.BigMinecraftAPI;
 
 import java.util.ArrayList;
 import java.util.Arrays;

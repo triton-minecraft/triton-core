@@ -1,19 +1,18 @@
-package dev.kyriji.fabric.implementation;
+package dev.kyriji.forge.implementation;
 
 import dev.kyriji.common.models.TritonPlayer;
-import dev.kyriji.fabric.TritonCoreFabric;
+import dev.kyriji.forge.TritonCoreForge;
 import net.luckperms.api.cacheddata.CachedPermissionData;
-import net.luckperms.api.model.user.User;
 import net.luckperms.api.platform.PlayerAdapter;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 
 import java.util.UUID;
 
-public class FabricPlayer extends FabricCommandSender<ServerPlayer> implements TritonPlayer {
+public class ForgePlayer extends ForgeCommandSender<ServerPlayer> implements TritonPlayer {
 	public ServerPlayer player;
 
-	public FabricPlayer(ServerPlayer player) {
+	public ForgePlayer(ServerPlayer player) {
 		super(player);
 
 		this.player = player;
@@ -32,7 +31,7 @@ public class FabricPlayer extends FabricCommandSender<ServerPlayer> implements T
 
 	@Override
 	public boolean hasPermission(String permission) {
-		PlayerAdapter<ServerPlayer> adapter = TritonCoreFabric.luckPerms.getPlayerAdapter(ServerPlayer.class);
+		PlayerAdapter<ServerPlayer> adapter = TritonCoreForge.luckPerms.getPlayerAdapter(ServerPlayer.class);
 		CachedPermissionData permissionData = adapter.getPermissionData(player);
 
 		return permissionData.checkPermission(permission).asBoolean();

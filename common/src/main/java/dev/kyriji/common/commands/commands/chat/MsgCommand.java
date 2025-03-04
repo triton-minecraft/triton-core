@@ -15,7 +15,7 @@ import dev.kyriji.common.playerdata.enums.PlayerDataType;
 import dev.kyriji.common.punishments.models.PunishmentAction;
 import dev.kyriji.common.punishments.models.TimedPunishmentAction;
 import dev.kyriji.common.punishments.utils.PunishmentUtils;
-import dev.wiji.bigminecraftapi.BigMinecraftAPI;
+import dev.kyriji.bigminecraftapi.BigMinecraftAPI;
 
 import java.util.*;
 import java.util.stream.Collectors;

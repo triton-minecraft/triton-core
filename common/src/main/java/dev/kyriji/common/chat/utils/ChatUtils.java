@@ -1,6 +1,6 @@
 package dev.kyriji.common.chat.utils;
 
-import dev.wiji.bigminecraftapi.BigMinecraftAPI;
+import dev.kyriji.bigminecraftapi.BigMinecraftAPI;
 
 import java.util.ArrayList;
 import java.util.List;

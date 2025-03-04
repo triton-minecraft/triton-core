@@ -6,7 +6,7 @@ import dev.kyriji.common.commands.models.TritonCommand;
 import dev.kyriji.common.models.TritonCommandSender;
 import dev.kyriji.common.models.TritonPlayer;
 import dev.kyriji.common.playerdata.enums.Permission;
-import dev.wiji.bigminecraftapi.BigMinecraftAPI;
+import dev.kyriji.bigminecraftapi.BigMinecraftAPI;
 
 import java.util.Arrays;
 import java.util.List;

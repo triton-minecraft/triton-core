@@ -10,8 +10,8 @@ import dev.kyriji.common.playerdata.controllers.PlayerDataManager;
 import dev.kyriji.common.playerdata.documents.NetworkData;
 import dev.kyriji.common.playerdata.enums.Permission;
 import dev.kyriji.common.playerdata.enums.PlayerDataType;
-import dev.wiji.bigminecraftapi.BigMinecraftAPI;
-import dev.wiji.bigminecraftapi.controllers.RedisListener;
+import dev.kyriji.bigminecraftapi.BigMinecraftAPI;
+import dev.kyriji.bigminecraftapi.controllers.RedisListener;
 
 import java.util.Arrays;
 import java.util.List;

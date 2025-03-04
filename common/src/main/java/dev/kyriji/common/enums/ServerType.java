@@ -4,5 +4,7 @@ public enum ServerType {
 	MINESTOM,
 	SPIGOT,
 	VELOCITY,
+	FABRIC,
+	FORGE,
 	;
 }

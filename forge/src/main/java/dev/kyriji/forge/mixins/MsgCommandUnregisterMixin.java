@@ -1,12 +1,8 @@
-package dev.kyriji.fabric.mixins;
+package dev.kyriji.forge.mixins;
 
 import com.mojang.brigadier.CommandDispatcher;
-import dev.kyriji.fabric.hooks.FabricPlayerDataHook;
-import dev.kyriji.fabric.implementation.FabricPlayer;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.commands.MsgCommand;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.players.PlayerList;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

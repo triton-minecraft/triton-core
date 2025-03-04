@@ -19,7 +19,7 @@ import dev.kyriji.common.punishments.enums.suggestions.DurationSuggestion;
 import dev.kyriji.common.punishments.enums.suggestions.MuteReasonSuggestion;
 import dev.kyriji.common.punishments.models.TimedPunishmentAction;
 import dev.kyriji.common.punishments.utils.PunishmentUtils;
-import dev.wiji.bigminecraftapi.BigMinecraftAPI;
+import dev.kyriji.bigminecraftapi.BigMinecraftAPI;
 
 import java.util.ArrayList;
 import java.util.Arrays;

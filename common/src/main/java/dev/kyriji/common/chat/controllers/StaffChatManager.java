@@ -4,8 +4,8 @@ import dev.kyriji.common.TritonCoreCommon;
 import dev.kyriji.common.chat.hooks.TritonChatHook;
 import dev.kyriji.common.enums.ServerType;
 import dev.kyriji.common.playerdata.enums.Permission;
-import dev.wiji.bigminecraftapi.BigMinecraftAPI;
-import dev.wiji.bigminecraftapi.controllers.RedisListener;
+import dev.kyriji.bigminecraftapi.BigMinecraftAPI;
+import dev.kyriji.bigminecraftapi.controllers.RedisListener;
 
 public class StaffChatManager {
 
