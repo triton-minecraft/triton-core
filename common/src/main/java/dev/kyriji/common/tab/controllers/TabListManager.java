@@ -29,6 +29,7 @@ public class TabListManager {
 
 			//TODO: Check for config value
 
+
 			hook.updatePlayerPriority(player, getPriority(player));
 			hook.updatePlayerDisplayName(player, getDisplayName(player));
 		});
